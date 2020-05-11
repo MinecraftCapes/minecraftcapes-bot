@@ -7,4 +7,8 @@ Usage
 ```
 
 Response:
-https://i.imgur.com/SsniVC1.png
+![Response](https://i.imgur.com/SsniVC1.png)
+
+## Credits
+* james090500 (For Existing)
+* Siriuo (For creating the bot)
