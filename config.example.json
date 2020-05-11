@@ -1,0 +1,9 @@
+{
+    "client_id": "",
+    "cape_urls": [
+        {
+            "name": "MinecraftCapes",
+            "url": "https://minecraftcapes.co.uk/getCape/{$id}"
+        }
+    ]
+}
