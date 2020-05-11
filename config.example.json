@@ -4,6 +4,18 @@
         {
             "name": "MinecraftCapes",
             "url": "https://minecraftcapes.co.uk/getCape/{$id}"
+        },
+        {
+            "name": "Optifine",
+            "url": "http://s.optifine.net/capes/{$username}.png"
+        },
+        {
+            "name": "Laybymod",
+            "url": "https://www.labymod.net/page/php/getCapeTexture.php?uuid={$long_id}"
+        },
+        {
+            "name": "5zig",
+            "url": "https://textures.5zigreborn.eu/profile/{$long_id}"
         }
     ]
 }
