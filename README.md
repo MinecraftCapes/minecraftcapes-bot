@@ -1,12 +1,13 @@
 # MinecraftCapesBot
 The Minecraft Capes Discord Bot.
 
-Usage
+Usage:
 ```
 !user {username}
 ```
 
 Response:
+
 ![Response](https://i.imgur.com/SsniVC1.png)
 
 ## Credits
