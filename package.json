@@ -1,0 +1,23 @@
+{
+  "name": "minecraftcapesbot",
+  "version": "1.0.0",
+  "description": "Bot for MinecraftCapes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/james090500/MinecraftCapesBot.git"
+  },
+  "author": "Siriuo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/james090500/MinecraftCapesBot/issues"
+  },
+  "homepage": "https://github.com/james090500/MinecraftCapesBot#readme",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "node-fetch": "^2.6.0"
+  }
+}
