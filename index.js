@@ -96,8 +96,7 @@ client.on('message', async (message) => {
                     const code = args.join(" ");
                     let evaled = eval(code);
         
-                    if (typeof evaled !== "string")
-                        evaled = require("util").inspect(evaled);
+                    if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
                     if (evaled.length > 6000) {
                         var reply = await embed(`Error!`, `The input I got is too big for me to put in Discord, I've sent the input to console instead.`, `0xFF0000`)
                         message.channel.send(reply)
