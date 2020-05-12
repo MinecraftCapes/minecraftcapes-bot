@@ -1,14 +1,10 @@
-# MinecraftCapesBot
-The Minecraft Capes Discord Bot.
+# ktg5's fork of James' MinecraftCapesBot
+The Minecraft Capes Discord Bot. (ktg5 edit)
 
 Usage:
 ```
-!user {username}
+use "!help" for list of commands.
 ```
-
-Response:
-
-![Response](https://i.imgur.com/SsniVC1.png)
 
 ## Credits
 * james090500 (For Existing)
