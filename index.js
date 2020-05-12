@@ -44,6 +44,7 @@ async function checkUrl(url){
     return true;
 }
 
+var randomColor = Math.floor(Math.random()*16777215).toString(16);
 
 // Create an event listener for messages
 client.on('message', async (message) => {
@@ -54,13 +55,8 @@ client.on('message', async (message) => {
     var command = args.shift().toLowerCase();
     args = args.splice(0,1);
     if(command == 'ping'){
-        var randomColor = Math.floor(Math.random()*16777215).toString(16);
-
-        // I'm more used to making the embed with not using something like the function named "embed".
-        let pingMessage = new Discord.MessageEmbed()
-            .setColor(randomColor)
-            .setTitle(`Ping! ${Math.round(client.ping)}ms`)
-        message.channel.send({pingMessage});
+        var reply = await embed(`Ping!`, ``, randomColor);
+        message.channel.send(reply)
     }
 
     if(command == 'user'){
@@ -68,8 +64,7 @@ client.on('message', async (message) => {
         var cape_urls = config.cape_urls;
 
         if(response === null){
-
-            var reply = await embed("Invalid Username", "The username is invalid", '#ff2121');
+            var reply = await embed("Invalid Username!", "The username is invalid, please make sure you typed it in correctly.", randomColor);
             message.channel.send(reply);
             return;
         }
@@ -92,7 +87,7 @@ client.on('message', async (message) => {
 
         var description = '**[NameMC](https://namemc.com/profile/' + response.long_id + ')**';
         var thumbnail = 'https://crafatar.com/avatars/' + response.id + '?overlay=true';
-        var color = '#21ff33'
+        var color = randomColor
         var reply = await embed(args[0], description, color, fields, thumbnail);
         message.channel.send(reply);
     }
