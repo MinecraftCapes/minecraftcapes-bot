@@ -54,7 +54,13 @@ client.on('message', async (message) => {
     var command = args.shift().toLowerCase();
     args = args.splice(0,1);
     if(command == 'ping'){
-        message.channel.send('STOP PINGING ME!!!');
+        var randomColor = Math.floor(Math.random()*16777215).toString(16);
+
+        // I'm more used to making the embed with not using something like the function named "embed".
+        let pingMessage = new Discord.MessageEmbed()
+            .setColor(randomColor)
+            .setTitle(`Ping! ${Math.round(client.ping)}ms`)
+        message.channel.send({pingMessage});
     }
 
     if(command == 'user'){
