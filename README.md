@@ -2,6 +2,7 @@
 The Minecraft Capes Discord Bot. (ktg5 edit)
 
 Usage:
+Download all the source code on the "Code" page and run `npm i` inside of the MinecraftCapesBot folder.
 ```
 use "!help" for list of commands.
 ```
