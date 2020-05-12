@@ -99,13 +99,13 @@ client.on('message', async (message) => {
                 message.channel.send(`I was unable to do finish this command, make sure your DMs are open to all server members. \`ERR: 0xCR0003\``)
                 return
             });
-            var reply = await embed(`:mailbox_with_mail:\`You got mail!\``, ``, randomColor)
+            var reply = await embed(`:mailbox_with_mail:\`You got mail!\``, `${new Date().getTime() - message.createdTimestamp}ms`, randomColor)
             message.channel.send(reply);
         }
 
         if (command == 'ping') {
             var randomColor = Math.floor(Math.random()*16777215).toString(16);
-            var reply = await embed(`Ping!`, ``, randomColor);
+            var reply = await embed(`:ping_pong: Pong!`, `${new Date().getTime() - message.createdTimestamp}ms`, randomColor);
             message.channel.send(reply)
         }
 
@@ -130,7 +130,7 @@ client.on('message', async (message) => {
                         logger.info(`${(evaled)}`)
                         return;
                     }
-                    var reply = await embed(`Input:`, `\`\`\`${(evaled)}\`\`\``, randomColor)
+                    var reply = await embed(`\`\`\`${(evaled)}\`\`\``, `${new Date().getTime() - message.createdTimestamp}ms`, randomColor)
                     message.channel.send(reply)
                 } catch (err) {
                     var reply = await embed(`Eval Error`, `\`\`\`${err}\`\`\``, `0xFF0000`)
