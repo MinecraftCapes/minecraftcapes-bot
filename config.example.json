@@ -2,19 +2,19 @@
     "client_id": "",
     "cape_urls": [
         {
-            "name": "MinecraftCapes",
+            "name": "MinecraftCapes cape:",
             "url": "https://minecraftcapes.co.uk/getCape/{$id}"
         },
         {
-            "name": "Optifine",
+            "name": "Optifine cape:",
             "url": "http://s.optifine.net/capes/{$username}.png"
         },
         {
-            "name": "Laybymod",
+            "name": "Labymod cape:",
             "url": "https://www.labymod.net/page/php/getCapeTexture.php?uuid={$long_id}"
         },
         {
-            "name": "5zig",
+            "name": "5zig cape:",
             "url": "https://textures.5zigreborn.eu/profile/{$long_id}"
         }
     ]
