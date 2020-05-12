@@ -63,7 +63,22 @@ client.on('message', async (message) => {
     var command = args.shift().toLowerCase();
     args = args.splice(0,1);
     try {
-        if (command == 'ping'){
+        if (command == `help`) {
+            var randomColor = Math.floor(Math.random()*16777215).toString(16);
+            var sender = message.member.user;
+
+            var DMreply = await embed(`List of commands`, `\`${prefix}help\` - Helps you\n\`${prefix}ping\` - Pings the bot\n\`${prefix}user (mc-username)\` - Gets info about the user`, randomColor)
+            sender.createDM().then (dmChannel => {
+                dmChannel.send(DMreply)
+            }).catch (err => {
+                message.channel.send(`I was unable to do finish this command, make sure your DMs are open to all server members. \`ERR: 0xCR0003\``)
+                return
+            });
+            var reply = await embed(`:mailbox_with_mail:\`You got mail!\``, ``, randomColor)
+            message.channel.send(reply);
+        }
+
+        if (command == 'ping') {
             var randomColor = Math.floor(Math.random()*16777215).toString(16);
             var reply = await embed(`Ping!`, ``, randomColor);
             message.channel.send(reply)
@@ -95,7 +110,7 @@ client.on('message', async (message) => {
             }
         }
     
-        if (command == 'user'){
+        if (command == 'user') {
             var randomColor = Math.floor(Math.random()*16777215).toString(16);
             var response = await uuid(args[0]);
             var cape_urls = config.cape_urls;
@@ -106,7 +121,7 @@ client.on('message', async (message) => {
                 return;
             }
     
-            if(response === null){
+            if(response === null) {
                 var reply = await embed("Invalid Username!", "The username is invalid, please make sure you typed it in correctly.", `0xFF0000`);
                 message.channel.send(reply);
                 return;
