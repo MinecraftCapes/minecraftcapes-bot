@@ -4,9 +4,31 @@ const client = new Discord.Client();
 const fetch = require('node-fetch');
 // Make sure to use the config.example.json to easily create your config.json
 const config = require('./config.json');
+const prefix = '!';
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
+
+    client.user.setStatus('online')
+    setInterval(() => {
+        var messages = [
+            {
+                name: `for cmds. | ${prefix}help`,
+                type: "WATCHING",
+            },
+            {
+                name: `little kids type.`,
+                type: "Listening",
+            },
+            {
+                name: `cape creators make capes.`,
+                type: "Listening"
+            }
+        ]
+        client.user.setPresence({
+            game: messages[getRandomArbitrary(0, messages.length - 1)]
+        });
+    }, 60000);
 });
 
 async function uuid(username){
@@ -25,6 +47,10 @@ var special_ids = {
     ownerID2: 231385835054956544,
     ownerID3: 88720870993842176
 };
+
+function getRandomArbitrary(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
 
 async function embed(title, description, color, fields, thumbnail){
 
@@ -54,7 +80,6 @@ async function checkUrl(url){
 
 // Create an event listener for messages
 client.on('message', async (message) => {
-    const prefix = '!';
     if (!message.content.startsWith('!') || message.author.bot) return;
     if (client.user.id === message.author.id) {return}
     if (message.author.client == true) return;
@@ -92,6 +117,7 @@ client.on('message', async (message) => {
                     message.channel.send(reply)
                     return;
                 }
+
                 try {
                     const code = args.join(" ");
                     let evaled = eval(code);
