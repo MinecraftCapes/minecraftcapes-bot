@@ -20,6 +20,12 @@ async function uuid(username){
     return response;
 }
 
+var special_ids = {
+    ownerID1: 184070212012736512,
+    ownerID2: 231385835054956544,
+    ownerID3: 88720870993842176
+};
+
 async function embed(title, description, color, fields, thumbnail){
 
     const response = new Discord.MessageEmbed()
@@ -57,13 +63,39 @@ client.on('message', async (message) => {
     var command = args.shift().toLowerCase();
     args = args.splice(0,1);
     try {
-        if(command == 'ping'){
+        if (command == 'ping'){
             var randomColor = Math.floor(Math.random()*16777215).toString(16);
             var reply = await embed(`Ping!`, ``, randomColor);
             message.channel.send(reply)
         }
+
+        if (command == 'eval') {
+            if (message.author.id == special_ids.ownerID1 || message.author.id == special_ids.ownerID2 || message.author.id == special_ids.ownerID3) {
+                var randomColor = Math.floor(Math.random()*16777215).toString(16);
+                if (!args[0]) {
+                    var reply = await embed(`User error!`, `You didn't enter any code after the command!`, `0xFF0000`)
+                    message.channel.send(reply)
+                    return;
+                }
+                try {
+                    const code = args.join(" ");
+                    let evaled = eval(code);
+        
+                    if (typeof evaled !== "string")
+                        evaled = require("util").inspect(evaled);
+                    var reply = await embed(`Input:`, `\`\`\`${(evaled)}\`\`\``, randomColor)
+                    message.channel.send(reply)
+                } catch (err) {
+                    var reply = await embed(`Eval Error`, `\`\`\`${err}\`\`\``, `0xFF0000`)
+                    message.channel.send(reply)
+                    console.log(`Eval Error from ${message.author.id}: ${err.stack}`)
+                }
+            } else {
+                return;
+            }
+        }
     
-        if(command == 'user'){
+        if (command == 'user'){
             var randomColor = Math.floor(Math.random()*16777215).toString(16);
             var response = await uuid(args[0]);
             var cape_urls = config.cape_urls;
@@ -108,10 +140,8 @@ client.on('message', async (message) => {
             message.channel.send(reply);
         }
     } catch (err) {
-        var embed = new Discord.RichEmbed()
-            .setColor(0xFF9900)
-            .addField(":warning: Oops! I just got a error.\n", `I guess report it to staff, here's the error I got: \n` + "```" + err + "```")
-        channelmsg.send({ embed });
+        var reply = embed(`Oops! I just got a error.`, `I guess report it to staff, here's the error I got: \n` + "```" + err + "```", `0xFF9900`)
+        message.channel.send({reply});
         logger.error(err.stack);
     }
 });
