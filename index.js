@@ -98,6 +98,13 @@ client.on('message', async (message) => {
         
                     if (typeof evaled !== "string")
                         evaled = require("util").inspect(evaled);
+                    if (evaled.length > 6000) {
+                        var reply = await embed(`Error!`, `The input I got is too big for me to put in Discord, I've sent the input to console instead.`, `0xFF0000`)
+                        message.channel.send(reply)
+                        logger.info(`Eval input (too big to put in Discord)`)
+                        logger.info(`${(evaled)}`)
+                        return;
+                    }
                     var reply = await embed(`Input:`, `\`\`\`${(evaled)}\`\`\``, randomColor)
                     message.channel.send(reply)
                 } catch (err) {
