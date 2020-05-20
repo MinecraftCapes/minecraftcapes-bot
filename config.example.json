@@ -6,6 +6,10 @@
             "url": "https://minecraftcapes.co.uk/getCape/{$id}"
         },
         {
+            "name": "MinecraftCapes ears:",
+            "url": "https://minecraftcapes.co.uk/getEars/{$id}"
+        },
+        {
             "name": "Optifine cape:",
             "url": "http://s.optifine.net/capes/{$username}.png"
         },
