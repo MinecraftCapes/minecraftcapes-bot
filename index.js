@@ -43,9 +43,9 @@ async function uuid(username){
 }
 
 var special_ids = {
-    ownerID1: 184070212012736512,
-    ownerID2: 231385835054956544,
-    ownerID3: 88720870993842176
+    supportstaff: 478670065483513860,
+    contributor: 479048180202340362,
+    capecreator: 628211166321311744
 };
 
 function getRandomArbitrary(min, max) {
@@ -96,7 +96,7 @@ client.on('message', async (message) => {
             sender.createDM().then (dmChannel => {
                 dmChannel.send(DMreply)
             }).catch (err => {
-                message.channel.send(`I was unable to do finish this command, make sure your DMs are open to all server members. \`ERR: 0xCR0003\``)
+                message.channel.send(`I was unable to finish this command, make sure your DMs are open to all server members. \`ERR: 0xCR0003\``)
                 return
             });
             var reply = await embed(`:mailbox_with_mail:\`You got mail!\``, `${new Date().getTime() - message.createdTimestamp}ms`, randomColor)
@@ -110,7 +110,7 @@ client.on('message', async (message) => {
         }
 
         if (command == 'eval') {
-            if (message.author.id == special_ids.ownerID1 || message.author.id == special_ids.ownerID2 || message.author.id == special_ids.ownerID3) {
+            if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator)) {
                 var randomColor = Math.floor(Math.random()*16777215).toString(16);
                 if (!args[0]) {
                     var reply = await embed(`User error!`, `You didn't enter any code after the command!`, `0xFF0000`)
@@ -126,7 +126,7 @@ client.on('message', async (message) => {
                     if (evaled.length > 6000) {
                         var reply = await embed(`Error!`, `The input I got is too big for me to put in Discord, I've sent the input to console instead.`, `0xFF0000`)
                         message.channel.send(reply)
-                        logger.info(`Eval input (too big to put in Discord)`)
+                        logger.info(`Eval input (too big to put in Discord):`)
                         logger.info(`${(evaled)}`)
                         return;
                     }
@@ -187,7 +187,7 @@ client.on('message', async (message) => {
             message.channel.send(reply);
         }
     } catch (err) {
-        var reply = embed(`Oops! I just got a error.`, `I guess report it to staff, here's the error I got: \n` + "```" + err + "```", `0xFF9900`)
+        var reply = embed(`Oops! I just got an error.`, `I guess report it to staff, here's the error I got: \n` + "```" + err + "```", `0xFF9900`)
         message.channel.send({reply});
         logger.error(err.stack);
     }
