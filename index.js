@@ -88,7 +88,7 @@ client.on('message', async (message) => {
     var command = args.shift().toLowerCase();
     args = args.splice(0,1);
     try {
-        if (command == `help`) {
+        if (command == `commands`) {
             var randomColor = Math.floor(Math.random()*16777215).toString(16);
             var sender = message.member.user;
 
