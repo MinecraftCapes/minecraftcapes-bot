@@ -4,7 +4,9 @@
   "description": "Bot for MinecraftCapes",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon bot.js",
+    "startdev": "node bot.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,7 @@
   "homepage": "https://github.com/james090500/MinecraftCapesBot#readme",
   "dependencies": {
     "discord.js": "^12.2.0",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "winston": "^3.2.1"
   }
 }
