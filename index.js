@@ -68,6 +68,8 @@ async function embed(title, description, color, fields, thumbnail){
 async function checkUrl(url){
     var response = await fetch(url);
 
+    console.log("[" + new Date().toLocaleString() + "] Recieved response from " + url);
+
     if(response.status === 404){
         return false;
     }
