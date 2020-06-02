@@ -49,9 +49,10 @@ async function uuid(username){
 }
 
 var special_ids = {
-    supportstaff: 478670065483513860,
-    contributor: 479048180202340362,
-    capecreator: 628211166321311744
+    supportstaff: "478670065483513860",
+    contributor: "479048180202340362",
+    capecreator: "628211166321311744",
+    chromasupport: "531118248372994078"
 };
 
 function getRandomArbitrary(min, max) {
@@ -118,7 +119,8 @@ client.on('message', async (message) => {
         }
 
         if (command == 'eval') {
-            if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor)) {
+            // logger.info(`${typeof message.member.roles.cache.keyArray()[0]}`)
+            if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
                 var randomColor = Math.floor(Math.random()*16777215).toString(16);
                 if (!args[0]) {
                     var reply = await embed(`User error!`, `You didn't enter any code after the command!`, `0xFF0000`)
@@ -153,7 +155,7 @@ client.on('message', async (message) => {
         }
     
         if (command == 'user') {
-            if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator)) {
+            if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
                 var randomColor = Math.floor(Math.random()*16777215).toString(16);
                 var response = await uuid(args[0]);
                 var cape_urls = config.cape_urls;
