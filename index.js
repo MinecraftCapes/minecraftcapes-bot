@@ -48,6 +48,8 @@ async function uuid(username){
     return response;
 }
 
+// These IDs have to be set to strings, as discord.js takes strings when it comes to IDs.
+// Debug code used - logger.info(`${typeof message.member.roles.cache.keyArray()[0]}`)
 var special_ids = {
     supportstaff: "478670065483513860",
     contributor: "479048180202340362",
@@ -119,7 +121,7 @@ client.on('message', async (message) => {
         }
 
         if (command == 'eval') {
-            // logger.info(`${typeof message.member.roles.cache.keyArray()[0]}`)
+            // This command can only be used by Staff, Contributors, and Cape Creators on Mccapes and also Staff on ktg5's bot testing server.
             if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
                 var randomColor = Math.floor(Math.random()*16777215).toString(16);
                 if (!args[0]) {
@@ -133,6 +135,7 @@ client.on('message', async (message) => {
                     let evaled = eval(code);
         
                     if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
+                    // Discord's limit of 6000 characters in a embed message...
                     if (evaled.length > 6000) {
                         var reply = await embed(`Error!`, `The input I got is too big for me to put in Discord, I've sent the input to console instead.`, `0xFF0000`)
                         message.channel.send(reply)
@@ -155,6 +158,7 @@ client.on('message', async (message) => {
         }
     
         if (command == 'user') {
+            // This command can only be used by Staff, Contributors, and Cape Creators on Mccapes and also Staff on ktg5's bot testing server.
             if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
                 var randomColor = Math.floor(Math.random()*16777215).toString(16);
                 var response = await uuid(args[0]);
@@ -172,6 +176,7 @@ client.on('message', async (message) => {
                     return;
                 }
                 
+                // Wait command is used so people won't think the bot has crashed.
                 var msg1 = await embed(`Please wait...`, ``, randomColor);
                 message.channel.send(msg1)
         
@@ -186,7 +191,7 @@ client.on('message', async (message) => {
                     url = url.replace('{$long_id}', response.long_id);
                     url = url.replace('{$username}', response.name);
                     var url_check = await checkUrl(url);
-        
+                    
                     if(url_check){
                         fields.push({ name: cape.name, value: url });
                     }
