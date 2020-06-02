@@ -100,7 +100,7 @@ client.on('message', async (message) => {
             var randomColor = Math.floor(Math.random()*16777215).toString(16);
             var sender = message.member.user;
 
-            var DMreply = await embed(`List of commands`, `\`${prefix}help\` - Helps you\n\`${prefix}ping\` - Pings the bot\n\`${prefix}user (mc-username)\` - Gets info about the user`, randomColor)
+            var DMreply = await embed(`List of commands`, `\`${prefix}help\` - Helps you\n\`${prefix}ping\` - Pings the bot\n\`[Staff/Contributor/Cape Creator command] ${prefix}user (mc-username)\` - Gets info about the user`, randomColor)
             sender.createDM().then (dmChannel => {
                 dmChannel.send(DMreply)
             }).catch (err => {
@@ -118,7 +118,7 @@ client.on('message', async (message) => {
         }
 
         if (command == 'eval') {
-            if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator)) {
+            if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor)) {
                 var randomColor = Math.floor(Math.random()*16777215).toString(16);
                 if (!args[0]) {
                     var reply = await embed(`User error!`, `You didn't enter any code after the command!`, `0xFF0000`)
@@ -153,7 +153,7 @@ client.on('message', async (message) => {
         }
     
         if (command == 'user') {
-            // if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator)) {
+            if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator)) {
                 var randomColor = Math.floor(Math.random()*16777215).toString(16);
                 var response = await uuid(args[0]);
                 var cape_urls = config.cape_urls;
@@ -197,11 +197,11 @@ client.on('message', async (message) => {
                 message.channel.bulkDelete(1);
                 message.channel.send(reply);
             }
-        // } else {
-        //     var reply = await embed(`User error!`, `You don't have permission to use this command!`)
-        //     message.channel.send(reply)
-        //     return;
-        // }
+        } else {
+            var reply = await embed(`User error!`, `You don't have permission to use this command!`)
+            message.channel.send(reply)
+            return;
+        }
     } catch (err) {
         var reply = embed(`Oops! I just got an error.`, `I guess report it to staff, here's the error I got: \n` + "```" + err + "```", `0xFF9900`)
         message.channel.send({reply});
