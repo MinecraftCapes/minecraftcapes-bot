@@ -196,11 +196,11 @@ client.on('message', async (message) => {
                 var reply = await embed(args[0], description, color, fields, thumbnail);
                 message.channel.bulkDelete(1);
                 message.channel.send(reply);
+            } else {
+                var reply = await embed(`User error!`, `You don't have permission to use this command!`)
+                message.channel.send(reply)
+                return;
             }
-        } else {
-            var reply = await embed(`User error!`, `You don't have permission to use this command!`)
-            message.channel.send(reply)
-            return;
         }
     } catch (err) {
         var reply = embed(`Oops! I just got an error.`, `I guess report it to staff, here's the error I got: \n` + "```" + err + "```", `0xFF9900`)
