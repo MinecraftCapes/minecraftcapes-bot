@@ -6,6 +6,12 @@ const fetch = require('node-fetch');
 const config = require('./config.json');
 const prefix = '!';
 
+logger.remove(logger.transports.Console);
+logger.level = 'debug';
+logger.add(logger.transports.Console, {
+    colorize: true
+});
+
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 
@@ -171,23 +177,48 @@ client.on('message', async (message) => {
             for(var cape_url in cape_urls){
                 var cape = cape_urls[cape_url];
                 var url = cape.url;
-                url = url.replace('{$id}', response.id);
                 url = url.replace('{$long_id}', response.long_id);
                 url = url.replace('{$username}', response.name);
                 var url_check = await checkUrl(url);
     
                 if(url_check){
                     logger.info({ name: cape.name, value: url });
+                    message.channel.send(reply);
+                    return;
                 }
+                
+                var msg1 = await embed(`Please wait...`, ``, randomColor);
+                message.channel.send(msg1)
+        
+                var fields = [
+                    { name: "UUID:", value: '``' + response.id + '``' }
+                ];
+        
+                for(var cape_url in cape_urls){
+                    var cape = cape_urls[cape_url];
+                    var url = cape.url;
+                    url = url.replace('{$id}', response.id);
+                    url = url.replace('{$long_id}', response.long_id);
+                    url = url.replace('{$username}', response.name);
+                    var url_check = await checkUrl(url);
+        
+                    if(url_check){
+                        logger.info({ name: cape.name, value: url });
+                    }
+                }
+        
+                var description = '**[NameMC Link](https://namemc.com/profile/' + response.long_id + ')**';
+                var thumbnail = 'https://crafatar.com/avatars/' + response.id + '?overlay=true';
+                var color = randomColor
+                var reply = await embed(args[0], description, color, fields, thumbnail);
+                message.channel.bulkDelete(1);
+                message.channel.send(reply);
             }
-    
-            var description = '**[NameMC Link](https://namemc.com/profile/' + response.long_id + ')**';
-            var thumbnail = 'https://crafatar.com/avatars/' + response.id + '?overlay=true';
-            var color = randomColor
-            var reply = await embed(args[0], description, color, fields, thumbnail);
-            message.channel.bulkDelete(1);
-            message.channel.send(reply);
-        }
+        // } else {
+        //     var reply = await embed(`User error!`, `You don't have permission to use this command!`)
+        //     message.channel.send(reply)
+        //     return;
+        // }
     } catch (err) {
         var reply = embed(`Oops! I just got an error.`, `I guess report it to staff, here's the error I got: \n` + "```" + err + "```", `0xFF9900`)
         message.channel.send({reply});
