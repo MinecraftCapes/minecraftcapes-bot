@@ -15,3 +15,4 @@ use "!commands" for list of commands when bot is running.
 ## Credits
 * james090500 (For Existing)
 * Siriuo (For creating the bot)
+* Ktg5 (For improving some stuff)
