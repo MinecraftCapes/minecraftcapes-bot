@@ -3,11 +3,11 @@
     "cape_urls": [
         {
             "name": "MinecraftCapes:",
-            "url": "https://minecraftcapes.co.uk/{$id}/cape"
+            "url": "https://www.minecraftcapes.co.uk/profile/{$id}/cape"
         },
         {
             "name": "MinecraftCapes ears:",
-            "url": "https://minecraftcapes.co.uk/{$id}/ears"
+            "url": "https://www.minecraftcapes.co.uk/profile/{$id}/ears"
         },
         {
             "name": "Optifine:",
