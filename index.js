@@ -74,7 +74,7 @@ async function embed(title, description, color, fields, thumbnail){
 async function checkUrl(url){
     var response = await fetch(url);
 
-    console.log("[" + new Date().toLocaleString() + "] Recieved response from " + url);
+    logger.info("[" + new Date().toLocaleString() + "] Recieved response from " + url);
 
     if(response.status === 404){
         return false;
@@ -146,43 +146,26 @@ client.on('message', async (message) => {
                     console.log(`Eval Error from ${message.author.id}: ${err.stack}`)
                 }
             } else {
+                var reply = await embed(`User error!`, `You don't have permission to use this command!`)
+                message.channel.send(reply)
                 return;
             }
         }
     
         if (command == 'user') {
-            var randomColor = Math.floor(Math.random()*16777215).toString(16);
-            var response = await uuid(args[0]);
-            var cape_urls = config.cape_urls;
-    
-            if (!args[0]) {
-                var reply = await embed(`User error!`, `You didn't enter a username after the command!`, `0xFF0000`)
-                message.channel.send(reply)
-                return;
-            }
-    
-            if(response === null) {
-                var reply = await embed("Invalid Username!", "The username is invalid, please make sure you typed it in correctly.", `0xFF0000`);
-                message.channel.send(reply);
-                return;
-            }
-            
-            var msg1 = await embed(`Please wait...`, ``, randomColor);
-            message.channel.send(msg1)
-    
-            var fields = [
-                { name: "UUID:", value: '``' + response.id + '``' }
-            ];
-    
-            for(var cape_url in cape_urls){
-                var cape = cape_urls[cape_url];
-                var url = cape.url;
-                url = url.replace('{$long_id}', response.long_id);
-                url = url.replace('{$username}', response.name);
-                var url_check = await checkUrl(url);
-    
-                if(url_check){
-                    logger.info({ name: cape.name, value: url });
+            // if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator)) {
+                var randomColor = Math.floor(Math.random()*16777215).toString(16);
+                var response = await uuid(args[0]);
+                var cape_urls = config.cape_urls;
+        
+                if (!args[0]) {
+                    var reply = await embed(`User error!`, `You didn't enter a username after the command!`, `0xFF0000`)
+                    message.channel.send(reply)
+                    return;
+                }
+        
+                if(response === null) {
+                    var reply = await embed("Invalid Username!", "The username is invalid, please make sure you typed it in correctly.", `0xFF0000`);
                     message.channel.send(reply);
                     return;
                 }
