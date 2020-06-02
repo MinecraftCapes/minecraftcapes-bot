@@ -176,7 +176,7 @@ client.on('message', async (message) => {
                     return;
                 }
                 
-                // Wait command is used so people won't think the bot has crashed.
+                // We make an embed here so people won't think the bot has crashed.
                 var msg1 = await embed(`Please wait...`, ``, randomColor);
                 message.channel.send(msg1)
         
