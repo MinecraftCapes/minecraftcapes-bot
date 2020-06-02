@@ -177,7 +177,7 @@ client.on('message', async (message) => {
                 var url_check = await checkUrl(url);
     
                 if(url_check){
-                    fields.push({ name: cape.name, value: url });
+                    logger.info({ name: cape.name, value: url });
                 }
             }
     
