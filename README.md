@@ -10,7 +10,7 @@ Before using the bot, make sure to make a `config.json` inside of the MinecraftC
 use "!commands" for list of commands when bot is running.
 ```
 
-![cool image](https://cdn.discordapp.com/attachments/478663896887066644/712680124058959913/Screen_Shot_2020-05-20_at_7.54.23_AM.png)
+![cool image](https://cdn.discordapp.com/attachments/433816025343983618/717421281149976716/Screen_Shot_2020-06-02_at_9.55.59_AM.png)
 
 ## Credits
 * james090500 (For Existing)
