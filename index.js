@@ -29,7 +29,7 @@ client.on('ready', () => {
             {
                 name: `cape creators make capes.`,
                 type: "Listening"
-            }
+            },
         ]
         client.user.setPresence({
             game: messages[getRandomArbitrary(0, messages.length - 1)]
@@ -54,7 +54,8 @@ var special_ids = {
     supportstaff: "478670065483513860",
     contributor: "479048180202340362",
     capecreator: "628211166321311744",
-    chromasupport: "531118248372994078"
+    chromasupport: "531118248372994078",
+    capeRequests: "625736592115630122"
 };
 
 function getRandomArbitrary(min, max) {
@@ -91,6 +92,33 @@ async function checkUrl(url){
 
 // Create an event listener for messages
 client.on('message', async (message) => {
+    // If the message is sent in the cape requests channel
+    if (message.channel.id === special_ids.capeRequests) {
+        // If the messages is sent by a staff member
+        if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
+            // If there is an attachment and there is more than on attachment
+            if (message.attachments && message.attachments.size > 0) {
+                // Then for each attachment uploaded...
+                message.attachments.each(attachment => {
+                    // If there's an URL to the image
+                    if (attachment.url) {
+                        // Lowercase the URL
+                        var lowerCaseUrl = attachment.url.toLocaleLowerCase()
+                        // If the images is a PNG or GIF
+                        if (lowerCaseUrl.endsWith(".png") || lowerCaseUrl.endsWith(".gif")) {
+                            // Create embed message with the direct link to the image(s)'s URL.
+                            var randomColor = Math.floor(Math.random()*16777215).toString(16);
+                            var embed = new Discord.MessageEmbed()
+                                .setDescription(`A cape has been detected, [Here's a direct download to it](${attachment.url})`)
+                                .setColor(randomColor)
+                            message.channel.send({embed});
+                        }
+                    }
+                });
+            }
+        }
+    }
+
     if (!message.content.startsWith('!') || message.author.bot) return;
     if (client.user.id === message.author.id) {return}
     if (message.author.client == true) return;

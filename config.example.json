@@ -2,23 +2,23 @@
     "client_id": "xxxx",
     "cape_urls": [
         {
-            "name": "MinecraftCapes:",
+            "name": "MinecraftCapes",
             "url": "https://www.minecraftcapes.co.uk/profile/{$id}/cape"
         },
         {
-            "name": "MinecraftCapes ears:",
+            "name": "MinecraftCapes ears",
             "url": "https://www.minecraftcapes.co.uk/profile/{$id}/ears"
         },
         {
-            "name": "Optifine:",
+            "name": "Optifine",
             "url": "http://s.optifine.net/capes/{$username}.png"
         },
         {
-            "name": "Labymod:",
+            "name": "Labymod",
             "url": "https://www.labymod.net/page/php/getCapeTexture.php?uuid={$long_id}"
         },
         {
-            "name": "5zig:",
+            "name": "5zig",
             "url": "https://textures.5zigreborn.eu/profile/{$long_id}"
         }
     ]
