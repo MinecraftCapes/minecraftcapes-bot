@@ -97,7 +97,7 @@ client.on('message', async (message) => {
     if (message.channel.id === special_ids.capeRequests || message.channel.id === special_ids.testingServer1) {
         // If the messages is sent by a staff member
         if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
-            // If there is an attachment and there is more than on attachment
+            // If there is an attachment and there is more than one attachment
             if (message.attachments && message.attachments.size > 0) {
                 // Then for each attachment uploaded...
                 message.attachments.each(attachment => {
