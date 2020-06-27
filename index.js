@@ -23,17 +23,15 @@ client.on('ready', () => {
                 type: "WATCHING",
             },
             {
-                name: `little kids type.`,
-                type: "Listening",
+                name: `cape creators make capes.`,
+                type: "WATCHING"
             },
             {
-                name: `cape creators make capes.`,
-                type: "Listening"
+                name: `play.capecraft.net`,
+                type: "PLAYING"
             },
         ]
-        client.user.setPresence({
-            game: messages[getRandomArbitrary(0, messages.length - 1)]
-        });
+        client.user.setPresence({activity: messages[getRandomArbitrary(0, messages.length - 1)]})
     }, 60000);
 });
 
