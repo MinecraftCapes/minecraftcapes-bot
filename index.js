@@ -137,7 +137,7 @@ client.on('message', async (message) => {
                 message.channel.send(`I was unable to finish this command, make sure your DMs are open to all server members. \`ERR: 0xCR0003\``)
                 return
             });
-            var reply = await embed(`:mailbox_with_mail:\`You got mail!\``, `${new Date().getTime() - message.createdTimestamp}ms`, randomColor)
+            var reply = await embed(`:mailbox_with_mail:\`You got mail!\``, `*make sure you have DMs open* | ${new Date().getTime() - message.createdTimestamp}ms`, randomColor)
             message.channel.send(reply);
         }
 
