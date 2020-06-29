@@ -53,7 +53,7 @@ var special_ids = {
     contributor: "479048180202340362",
     capecreator: "628211166321311744",
     chromasupport: "531118248372994078",
-    capeRequests: "625736592115630122",
+    // capeRequests: "625736592115630122",
     testingServer1: "433816025343983618"
 };
 
@@ -91,8 +91,8 @@ async function checkUrl(url){
 
 // Create an event listener for messages
 client.on('message', async (message) => {
-    // If the message is sent in the cape requests channel
-    if (message.channel.id === special_ids.capeRequests || message.channel.id === special_ids.testingServer1) {
+    // If the message is sent a cape requests ticket
+    if (message.channel.name.startsWith("cape-request") || message.channel.id === special_ids.testingServer1) {
         // If the messages is sent by a staff member
         if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
             // If there is an attachment and there is more than one attachment
