@@ -19,7 +19,7 @@ client.on('ready', () => {
     setInterval(() => {
         var messages = [
             {
-                name: `for cmds. | ${prefix}help`,
+                name: `for cmds. | ${prefix}cmds`,
                 type: "WATCHING",
             },
             {
@@ -126,7 +126,7 @@ client.on('message', async (message) => {
     var command = args.shift().toLowerCase();
     args = args.splice(0,1);
     try {
-        if (command == `commands`) {
+        if (command == `commands` || command == `cmds`) {
             var randomColor = Math.floor(Math.random()*16777215).toString(16);
             var sender = message.member.user;
 
@@ -137,7 +137,7 @@ client.on('message', async (message) => {
                 message.channel.send(`I was unable to finish this command, make sure your DMs are open to all server members. \`ERR: 0xCR0003\``)
                 return
             });
-            var reply = await embed(`:mailbox_with_mail:\`You got mail!\``, `${new Date().getTime() - message.createdTimestamp}ms`, randomColor)
+            var reply = await embed(`:mailbox_with_mail:\`You got mail!\``, `*make sure you have DMs open* | ${new Date().getTime() - message.createdTimestamp}ms`, randomColor)
             message.channel.send(reply);
         }
 
