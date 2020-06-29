@@ -19,7 +19,7 @@ client.on('ready', () => {
     setInterval(() => {
         var messages = [
             {
-                name: `for cmds. | ${prefix}help`,
+                name: `for cmds. | ${prefix}cmds`,
                 type: "WATCHING",
             },
             {
@@ -126,7 +126,7 @@ client.on('message', async (message) => {
     var command = args.shift().toLowerCase();
     args = args.splice(0,1);
     try {
-        if (command == `commands`) {
+        if (command == `commands` || command == `cmds`) {
             var randomColor = Math.floor(Math.random()*16777215).toString(16);
             var sender = message.member.user;
 
