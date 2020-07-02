@@ -224,7 +224,7 @@ client.on('message', async (message) => {
                     }
                 }
         
-                var description = '**[NameMC Link](https://namemc.com/profile/' + response.long_id + ')**';
+                var description = `**[NameMC Link](https://namemc.com/profile/${response.long_id})**\n**[MinecraftCapes Link](https://minecraftcapes.net/profile/${response.id})**`;
                 var thumbnail = 'https://crafatar.com/avatars/' + response.id + '?overlay=true';
                 var color = randomColor
                 var reply = await embed(args[0], description, color, fields, thumbnail);
