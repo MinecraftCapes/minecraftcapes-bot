@@ -91,32 +91,32 @@ async function checkUrl(url){
 
 // Create an event listener for messages
 client.on('message', async (message) => {
-    // If the message is sent a cape requests ticket
-    if (message.channel.name.startsWith("cape-request") || message.channel.id === special_ids.testingServer1) {
-        // If the messages is sent by a staff member
-        if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
-            // If there is an attachment and there is more than one attachment
-            if (message.attachments && message.attachments.size > 0) {
-                // Then for each attachment uploaded...
-                message.attachments.each(attachment => {
-                    // If there's an URL to the image
-                    if (attachment.url) {
-                        // Lowercase the URL
-                        var lowerCaseUrl = attachment.url.toLocaleLowerCase()
-                        // If the images is a PNG or GIF
-                        if (lowerCaseUrl.endsWith(".png") || lowerCaseUrl.endsWith(".gif")) {
-                            // Create embed message with the direct link to the image(s)'s URL.
-                            var randomColor = Math.floor(Math.random()*16777215).toString(16);
-                            var embed = new Discord.MessageEmbed()
-                                .setDescription(`A cape has been detected, [Here's a direct download to it](${attachment.url})`)
-                                .setColor(randomColor)
-                            message.channel.send({embed});
-                        }
-                    }
-                });
-            }
-        }
-    }
+    // // If the message is sent a cape requests ticket
+    // if (message.channel.name.startsWith("cape-request") || message.channel.id === special_ids.testingServer1) {
+    //     // If the messages is sent by a staff member
+    //     if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
+    //         // If there is an attachment and there is more than one attachment
+    //         if (message.attachments && message.attachments.size > 0) {
+    //             // Then for each attachment uploaded...
+    //             message.attachments.each(attachment => {
+    //                 // If there's an URL to the image
+    //                 if (attachment.url) {
+    //                     // Lowercase the URL
+    //                     var lowerCaseUrl = attachment.url.toLocaleLowerCase()
+    //                     // If the images is a PNG or GIF
+    //                     if (lowerCaseUrl.endsWith(".png") || lowerCaseUrl.endsWith(".gif")) {
+    //                         // Create embed message with the direct link to the image(s)'s URL.
+    //                         var randomColor = Math.floor(Math.random()*16777215).toString(16);
+    //                         var embed = new Discord.MessageEmbed()
+    //                             .setDescription(`A cape has been detected, [Here's a direct download to it](${attachment.url})`)
+    //                             .setColor(randomColor)
+    //                         message.channel.send({embed});
+    //                     }
+    //                 }
+    //             });
+    //         }
+    //     }
+    // }
 
     if (!message.content.startsWith('!') || message.author.bot) return;
     if (client.user.id === message.author.id) {return}
@@ -234,6 +234,36 @@ client.on('message', async (message) => {
                 var reply = await embed(`User error!`, `You don't have permission to use this command!`)
                 message.channel.send(reply)
                 return;
+            }
+        }
+
+        if (command == 'cape') {
+            // If the messages is sent by a staff member
+            if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
+                // If there is an attachment and there is more than one attachment
+                if (message.attachments && message.attachments.size > 0) {
+                    // Then for each attachment uploaded...
+                    message.attachments.each(attachment => {
+                        // If there's an URL to the image
+                        if (attachment.url) {
+                            // Lowercase the URL
+                            var lowerCaseUrl = attachment.url.toLocaleLowerCase()
+                            // If the images is a PNG or GIF
+                            if (lowerCaseUrl.endsWith(".png") || lowerCaseUrl.endsWith(".gif")) {
+                                // Create embed message with the direct link to the image(s)'s URL.
+                                var randomColor = Math.floor(Math.random()*16777215).toString(16);
+                                var embed = new Discord.MessageEmbed()
+                                    .setDescription(`A cape has been detected, [here's a direct download to it](${attachment.url})`)
+                                    .setColor(randomColor)
+                                message.channel.send({embed});
+                            }
+                        }
+                    });
+                } else {
+                    var reply = await embed(`User error!`, `You didn't upload an image with the command!`, `0xFF0000`)
+                    message.channel.send(reply)
+                    return;
+                }
             }
         }
     } catch (err) {
