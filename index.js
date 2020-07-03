@@ -253,7 +253,7 @@ client.on('message', async (message) => {
                                 // Create embed message with the direct link to the image(s)'s URL.
                                 var randomColor = Math.floor(Math.random()*16777215).toString(16);
                                 var embed = new Discord.MessageEmbed()
-                                    .setDescription(`A cape has been detected, [Here's a direct download to it](${attachment.url})`)
+                                    .setDescription(`A cape has been detected, [here's a direct download to it](${attachment.url})`)
                                     .setColor(randomColor)
                                 message.channel.send({embed});
                             }
