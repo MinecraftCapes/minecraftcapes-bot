@@ -38,7 +38,7 @@ async function uuid(username) {
         return null;
     }
     response = await response.json();
-    response['shortUuid'] = response.uuid.replace("-", "");
+    response['shortUuid'] = response.uuid.replace(/-/g, "");
     return response;
 }
 
@@ -128,7 +128,7 @@ client.on('message', async (message) => {
                     var url = cape.url;
                     url = url.replace('{$id}', response.shortUuid);
                     url = url.replace('{$long_id}', response.uuid);
-                    url = url.replace('{$username}', response.name);
+                    url = url.replace('{$username}', response.username);
                     var url_check = await checkUrl(url);
 
                     if (url_check) {
@@ -139,7 +139,7 @@ client.on('message', async (message) => {
                     }
                 }
 
-                var description = `**[NameMC Link](https://mine.ly/${response.uuid})**\n**[MinecraftCapes Link](https://minecraftcapes.net/profile/${response.uuid})**`;
+                var description = `**[NameMC Link](https://mine.ly/${response.uuid})**\n**[MinecraftCapes Link](https://minecraftcapes.net/profile/${response.shortUuid})**`;
                 var thumbnail = `https://crafatar.com/avatars/${response.uuid}?overlay=true`;
                 var color = randomColor
                 var reply = await embed(args[0], description, color, fields, thumbnail);
