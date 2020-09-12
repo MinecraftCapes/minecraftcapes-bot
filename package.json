@@ -20,7 +20,7 @@
   "homepage": "https://github.com/james090500/MinecraftCapesBot#readme",
   "dependencies": {
     "discord.js": "^12.2.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "winston": "^2.4.4"
   }
 }
