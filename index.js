@@ -97,7 +97,7 @@ client.on('message', async (message) => {
     try {
         if (command == 'user') {
             // This command can only be used by Staff, Contributors, and Cape Creators on Mccapes and also Staff on ktg5's bot testing server.
-            if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
+            //if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
                 var randomColor = Math.floor(Math.random() * 16777215).toString(16);
                 var response = await uuid(args[0]);
                 var cape_urls = config.cape_urls;
@@ -145,11 +145,11 @@ client.on('message', async (message) => {
                 var reply = await embed(args[0], description, color, fields, thumbnail);
                 message.channel.bulkDelete(1);
                 message.channel.send(reply);
-            } else {
-                var reply = await embed(`User error!`, `You don't have permission to use this command!`)
-                message.channel.send(reply)
-                return;
-            }
+            //} else {
+            //    var reply = await embed(`User error!`, `You don't have permission to use this command!`)
+            //    message.channel.send(reply)
+            //    return;
+            //}
         }
 
         if (command == 'cape') {
