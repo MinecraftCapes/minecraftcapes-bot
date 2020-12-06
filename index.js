@@ -1,79 +1,81 @@
+//Require Libs
 const Discord = require('discord.js');
-const logger = require('winston');
-const client = new Discord.Client();
+const winston = require('winston');
+const { combine, timestamp, printf } = winston.format;
 const fetch = require('node-fetch');
-// Make sure to use the config.example.json to easily create your config.json
+const { URLSearchParams } = require('url');
 const config = require('./config.json');
+
+//Variables
+const client = new Discord.Client();
 const prefix = '!';
 
-logger.remove(logger.transports.Console);
-logger.level = 'debug';
-logger.add(logger.transports.Console, {
-    colorize: true
-});
-
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
-
-    client.user.setStatus('online')
-    setInterval(() => {
-        var messages = [{
-                name: `cape creators make capes.`,
-                type: "WATCHING"
-            },
-            {
-                name: `play.capecraft.net`,
-                type: "PLAYING"
-            },
-        ]
-        client.user.setPresence({
-            activity: messages[getRandomArbitrary(0, messages.length - 1)]
+//Logger add
+const logger = winston.createLogger({
+    level: 'info',
+    format: combine(
+        timestamp(),
+        printf(({ level, message, timestamp }) => {
+            return `${timestamp} ${level.toUpperCase()}: ${message}`;
         })
-    }, 60000);
-});
-
-async function uuid(username) {
-    var response = await fetch('https://api.ashcon.app/mojang/v2/user/' + username);
-    if (response.status === 404) {
-        return null;
-    }
-    response = await response.json();
-    response['shortUuid'] = response.uuid.replace(/-/g, "");
-    return response;
-}
+    ),
+    colorize: true,
+    transports: [
+        new winston.transports.Console()
+    ]
+})
 
 // These IDs have to be set to strings, as discord.js takes strings when it comes to IDs.
 // Debug code used - logger.info(`${typeof message.member.roles.cache.keyArray()[0]}`)
 var special_ids = {
-    supportstaff: "478670065483513860",
+    supportStaff: "478670065483513860",
     contributor: "479048180202340362",
-    capecreator: "628211166321311744",
-    chromasupport: "531118248372994078",
-    // capeRequests: "625736592115630122",
-    testingServer1: "433816025343983618"
+    capeCreator: "628211166321311744",
 };
 
-function getRandomArbitrary(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
+/**
+ * Get user from the API
+ * @param {*} value
+ */
+async function getUser(value) {
+    let response = await fetch(`https://api.ashcon.app/mojang/v2/user/${value}`);
+    if(response.status == 404) {
+        return null;
+    }
+
+    response = await response.json();
+    response.shortUuid = response.uuid.replace(/-/g, '');
+    return response;
 }
 
+/**
+ * Generate an embed
+ * @param {*} title
+ * @param {*} description
+ * @param {*} color
+ * @param {*} fields
+ * @param {*} thumbnail
+ */
 async function embed(title, description, color, fields, thumbnail) {
-
     const response = new Discord.MessageEmbed()
         .setTitle(title)
         .setColor(color)
         .setDescription(description)
         .setThumbnail(thumbnail);
+
     if (fields) {
         response.addFields(fields);
     }
+
     return response;
 }
 
+/**
+ * Check if the user has a cape or not
+ * @param {*} url
+ */
 async function checkUrl(url) {
     var response = await fetch(url);
-
-    logger.info("[" + new Date().toLocaleString() + "] Recieved response from " + url);
 
     if (response.status === 404) {
         return false;
@@ -85,74 +87,114 @@ async function checkUrl(url) {
     return true;
 }
 
-// Create an event listener for messages
+/**
+ * Once the client has logged in
+ */
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+    client.user.setStatus('online')
+});
+
+/**
+ * Listen for messages
+ */
 client.on('message', async (message) => {
+    //Stop bot or not messages
     if (!message.content.startsWith('!') || message.author.bot) return;
+    //Make sure the bot doesn't read itself
     if (client.user.id === message.author.id) return;
     if (message.author.client == true) return;
 
+    //Get the arguments
     var args = message.content.slice(prefix.length).split(' ');
     var command = args.shift().toLowerCase();
     args = args.splice(0, 1);
     try {
-        if (command == 'user') {
-            // This command can only be used by Staff, Contributors, and Cape Creators on Mccapes and also Staff on ktg5's bot testing server.
-            //if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
-                var randomColor = Math.floor(Math.random() * 16777215).toString(16);
-                var response = await uuid(args[0]);
-                var cape_urls = config.cape_urls;
+        if(command == 'user') {
+            logger.info(`Running !user for ${args[0]}`)
 
-                if (!args[0]) {
-                    var reply = await embed(`User error!`, `You didn't enter a username after the command!`, `0xFF0000`)
-                    message.channel.send(reply)
-                    return;
-                }
+            //Random message colour
+            var randomColor = Math.floor(Math.random() * 16777215).toString(16);
 
-                if (response === null) {
-                    var reply = await embed("Invalid Username!", "The username is invalid, please make sure you typed it in correctly.", `0xFF0000`);
-                    message.channel.send(reply);
-                    return;
-                }
+            //Get the user
+            var user = await getUser(args[0]);
 
-                // We make an embed here so people won't think the bot has crashed.
-                var msg1 = await embed(`Please wait...`, ``, randomColor);
-                message.channel.send(msg1)
+            //Get all cape urls
+            var cape_urls = config.cape_urls;
 
-                var fields = [{
-                    name: "UUID:",
-                    value: '``' + response.shortUuid + '``'
-                }];
+            if (!args[0]) {
+                let reply = await embed(`User error!`, `You didn't enter a username after the command!`, `0xFF0000`)
+                message.channel.send(reply)
+                return;
+            }
 
-                for (var cape_url in cape_urls) {
-                    var cape = cape_urls[cape_url];
-                    var url = cape.url;
-                    url = url.replace('{$id}', response.shortUuid);
-                    url = url.replace('{$long_id}', response.uuid);
-                    url = url.replace('{$username}', response.username);
-                    var url_check = await checkUrl(url);
-
-                    if (url_check) {
-                        fields.push({
-                            name: cape.name,
-                            value: url
-                        });
-                    }
-                }
-
-                var description = `**[NameMC Link](https://mine.ly/${response.uuid})**\n**[MinecraftCapes Link](https://minecraftcapes.net/profile/${response.shortUuid})**`;
-                var thumbnail = `https://crafatar.com/avatars/${response.uuid}?overlay=true`;
-                var color = randomColor
-                var reply = await embed(args[0], description, color, fields, thumbnail);
-                message.channel.bulkDelete(1);
+            if (user === null) {
+                let reply = await embed("Invalid Username!", "The username is invalid, please make sure you typed it in correctly.", `0xFF0000`);
                 message.channel.send(reply);
-            //} else {
-            //    var reply = await embed(`User error!`, `You don't have permission to use this command!`)
-            //    message.channel.send(reply)
-            //    return;
-            //}
+                return;
+            }
+
+            // We make an embed here so people won't think the bot has crashed.
+            var waitMessage = await embed(`Please wait...`, ``, randomColor);
+            message.channel.send(waitMessage)
+
+            // Add the fileds
+            var fields = [{
+                name: "UUID:",
+                value: '``' + user.shortUuid + '``'
+            }];
+
+            // Check MinecraftCapes
+            var minecraftcapes = await fetch(`https://minecraftcapes.net/profile/${user.shortUuid}`)
+            minecraftcapes = await minecraftcapes.json();
+            if(minecraftcapes.animatedCape || minecraftcapes.capeGlint || minecraftcapes.upsideDown) {
+                fields.push({
+                    name: "Premium",
+                    value: "Yes :tada:",
+                    inline: true
+                })
+            }
+
+            if(minecraftcapes.textures.cape) {
+                fields.push({
+                    name: "MinecraftCapes Cape",
+                    value: `https://minecraftcapes.net/profile/${user.shortUuid}/cape/map`
+                });
+            }
+
+            if(minecraftcapes.textures.ears) {
+                fields.push({
+                    name: "MinecraftCapes Ears",
+                    value: `https://minecraftcapes.net/profile/${user.shortUuid}/ears`
+                });
+            }
+
+            // Check for other cape providers
+            for (var cape_url in cape_urls) {
+                var cape = cape_urls[cape_url];
+                var url = cape.url;
+                url = url.replace('{$shortUuid}', user.shortUuid);
+                url = url.replace('{$uuid}', user.uuid);
+                url = url.replace('{$username}', user.username);
+                var url_check = await checkUrl(url);
+
+                if (url_check) {
+                    fields.push({
+                        name: cape.name,
+                        value: url
+                    });
+                }
+            }
+
+            var description = `**[NameMC Link](https://mine.ly/${user.uuid})**\n**[MinecraftCapes Link](https://minecraftcapes.net/user/${user.shortUuid})**`;
+            var thumbnail = `https://crafatar.com/avatars/${user.uuid}?overlay=true`;
+            var color = randomColor
+            var reply = await embed(user.username, description, color, fields, thumbnail);
+            message.channel.bulkDelete(1);
+            message.channel.send(reply);
         }
 
-        if (command == 'cape') {
+        if(command == 'cape') {
             // If the messages is sent by a staff member
             if (message.member.roles.cache.has(special_ids.supportstaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capecreator) || message.member.roles.cache.has(special_ids.chromasupport)) {
                 // If there is an attachment and there is more than one attachment
@@ -185,6 +227,30 @@ client.on('message', async (message) => {
                 message.delete();
             }
         }
+
+        if(command == 'premium') {
+            message.delete();
+            let code = args[0]
+
+            //Post params
+            let params = new URLSearchParams();
+            params.append('code', code);
+
+            //Send post request
+            let response = await fetch("https://minecraftcapes.net/api/premium/discord/check", {
+                method: 'POST',
+                body: params,
+            });
+            response = await response.json()
+
+            if(response.success) {
+                client.guilds.cache.get(message.guild.id).members.cache.get(message.author.id).roles.add("785110885847793694");
+                message.channel.send(`<@${message.author.id}> Success! You now have the premium role :)`)
+            } else {
+                console.log(JSON.stringify(response))
+                message.channel.send(`<@${message.author.id}> That code doesn't seem correct!`)
+            }
+        }
     } catch (err) {
         var reply = embed(`Oops! I just got an error.`, `I guess report it to staff, here's the error I got: \n` + "```" + err + "```", `0xFF9900`)
         message.channel.send({
@@ -194,4 +260,5 @@ client.on('message', async (message) => {
     }
 });
 
+//Login the bot
 client.login(config.client_id);
