@@ -39,6 +39,7 @@ var special_ids = {
  */
 async function getUser(value) {
     let response = await fetch(`https://api.ashcon.app/mojang/v2/user/${value}`);
+    console.log(response);
     if(response.status == 404) {
         return null;
     }
