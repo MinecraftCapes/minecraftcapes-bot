@@ -4,7 +4,7 @@ const winston = require('winston');
 const { combine, timestamp, printf } = winston.format;
 const fetch = require('node-fetch');
 const { URLSearchParams } = require('url');
-const config = require('./config.json');
+var config = null
 
 //Variables
 const client = new Discord.Client();
@@ -25,6 +25,14 @@ const logger = winston.createLogger({
     ]
 })
 
+//Try load config
+try {
+    config = require('./config.json');
+} catch(error) {
+    logger.error("Config file not found")
+    process.exit()
+}
+
 // These IDs have to be set to strings, as discord.js takes strings when it comes to IDs.
 // Debug code used - logger.info(`${typeof message.member.roles.cache.keyArray()[0]}`)
 var special_ids = {
@@ -39,7 +47,6 @@ var special_ids = {
  */
 async function getUser(value) {
     let response = await fetch(`https://api.ashcon.app/mojang/v2/user/${value}`);
-    console.log(response);
     if(response.status == 404) {
         return null;
     }
@@ -92,7 +99,7 @@ async function checkUrl(url) {
  * Once the client has logged in
  */
 client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
+    logger.info(`Logged in as ${client.user.tag}!`);
     client.user.setStatus('online')
 });
 
@@ -248,7 +255,6 @@ client.on('message', async (message) => {
                 client.guilds.cache.get(message.guild.id).members.cache.get(message.author.id).roles.add("785110885847793694");
                 message.channel.send(`<@${message.author.id}> Success! You now have the premium role :)`)
             } else {
-                console.log(JSON.stringify(response))
                 message.channel.send(`<@${message.author.id}> That code doesn't seem correct!`)
             }
         }

@@ -3,23 +3,15 @@
     "cape_urls": [
         {
             "name": "MinecraftCapes",
-            "url": "https://minecraftcapes.co.uk/profile/{$id}/cape"
+            "url": "https://minecraftcapes.net/profile/{$id}/cape"
         },
         {
-            "name": "MinecraftCapes ears",
-            "url": "https://minecraftcapes.co.uk/profile/{$id}/ears"
+            "name": "MinecraftCapes Ears",
+            "url": "https://minecraftcapes.net/profile/{$id}/ears"
         },
         {
             "name": "Optifine",
             "url": "http://s.optifine.net/capes/{$username}.png"
-        },
-        {
-            "name": "Labymod",
-            "url": "https://www.labymod.net/page/php/getCapeTexture.php?uuid={$long_id}"
-        },
-        {
-            "name": "5zig",
-            "url": "https://textures.5zigreborn.eu/profile/{$long_id}"
         }
     ]
 }
