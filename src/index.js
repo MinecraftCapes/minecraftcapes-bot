@@ -27,7 +27,7 @@ const logger = winston.createLogger({
 
 //Try load config
 try {
-    config = require('./config.json');
+    config = require('../config.json');
 } catch(error) {
     logger.error("Config file not found")
     process.exit()
@@ -46,13 +46,12 @@ var special_ids = {
  * @param {*} value
  */
 async function getUser(value) {
-    let response = await fetch(`https://api.ashcon.app/mojang/v2/user/${value}`);
+    let response = await fetch(`https://minecraftapi.net/api/v1/profile/${value}`);
     if(response.status == 404) {
         return null;
     }
 
     response = await response.json();
-    response.shortUuid = response.uuid.replace(/-/g, '');
     return response;
 }
 
@@ -149,11 +148,11 @@ client.on('message', async (message) => {
             // Add the fileds
             var fields = [{
                 name: "UUID:",
-                value: '``' + user.shortUuid + '``'
+                value: '``' + user.uuid + '``'
             }];
 
             // Check MinecraftCapes
-            var minecraftcapes = await fetch(`https://minecraftcapes.net/profile/${user.shortUuid}`)
+            var minecraftcapes = await fetch(`https://minecraftcapes.net/profile/${user.uuid}`)
             minecraftcapes = await minecraftcapes.json();
             if(minecraftcapes.animatedCape || minecraftcapes.capeGlint || minecraftcapes.upsideDown) {
                 fields.push({
@@ -166,14 +165,14 @@ client.on('message', async (message) => {
             if(minecraftcapes.textures.cape) {
                 fields.push({
                     name: "MinecraftCapes Cape",
-                    value: `https://minecraftcapes.net/profile/${user.shortUuid}/cape/map`
+                    value: `https://minecraftcapes.net/profile/${user.uuid}/cape/map`
                 });
             }
 
             if(minecraftcapes.textures.ears) {
                 fields.push({
                     name: "MinecraftCapes Ears",
-                    value: `https://minecraftcapes.net/profile/${user.shortUuid}/ears`
+                    value: `https://minecraftcapes.net/profile/${user.uuid}/ears`
                 });
             }
 
@@ -181,9 +180,8 @@ client.on('message', async (message) => {
             for (var cape_url in cape_urls) {
                 var cape = cape_urls[cape_url];
                 var url = cape.url;
-                url = url.replace('{$shortUuid}', user.shortUuid);
                 url = url.replace('{$uuid}', user.uuid);
-                url = url.replace('{$username}', user.username);
+                url = url.replace('{$username}', user.name);
                 var url_check = await checkUrl(url);
 
                 if (url_check) {
@@ -194,10 +192,10 @@ client.on('message', async (message) => {
                 }
             }
 
-            var description = `**[NameMC Link](https://mine.ly/${user.uuid})**\n**[MinecraftCapes Link](https://minecraftcapes.net/user/${user.shortUuid})**`;
-            var thumbnail = `https://crafatar.com/avatars/${user.uuid}?overlay=true`;
+            var description = `**[NameMC Link](https://mine.ly/${user.uuid})**\n**[MinecraftCapes Link](https://minecraftcapes.net/user/${user.uuid})**`;
+            var thumbnail = `https://minecraftapi.net/api/v1/profile/${user.uuid}/avatar?size=265&overlay=true`;
             var color = randomColor
-            var reply = await embed(user.username, description, color, fields, thumbnail);
+            var reply = await embed(user.name, description, color, fields, thumbnail);
             message.channel.bulkDelete(1);
             message.channel.send(reply);
         }
