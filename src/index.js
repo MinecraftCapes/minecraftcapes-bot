@@ -36,8 +36,9 @@ try {
 // These IDs have to be set to strings, as discord.js takes strings when it comes to IDs.
 // Debug code used - logger.info(`${typeof message.member.roles.cache.keyArray()[0]}`)
 var special_ids = {
-    supportStaff: "478670065483513860",
+    founder: "478667633932238872",
     contributor: "479048180202340362",
+    supportStaff: "478670065483513860",
     capeCreator: "628211166321311744",
 };
 
@@ -202,7 +203,7 @@ client.on('message', async (message) => {
 
         if(command == 'cape') {
             // If the messages is sent by a staff member
-            if (message.member.roles.cache.has(special_ids.supportStaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capeCreator)) {
+            if (message.member.roles.cache.has(special_ids.supportStaff) || message.member.roles.cache.has(special_ids.contributor) || message.member.roles.cache.has(special_ids.capeCreator) || message.member.roles.cache.has(special_ids.founder)) {
                 // If there is an attachment and there is more than one attachment
                 if (message.attachments && message.attachments.size > 0) {
                     // Then for each attachment uploaded...
