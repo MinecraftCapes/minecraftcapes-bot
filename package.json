@@ -19,9 +19,9 @@
   },
   "homepage": "https://github.com/james090500/MinecraftCapesBot#readme",
   "dependencies": {
-    "discord.js": "^12.5.1",
-    "logform": "^2.2.0",
-    "node-fetch": "^2.6.1",
-    "winston": "^3.3.3"
+    "discord.js": "^13.6.0",
+    "logform": "^2.3.2",
+    "node-fetch": "^3.2.0",
+    "winston": "^3.4.0"
   }
 }
