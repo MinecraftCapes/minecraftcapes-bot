@@ -7,7 +7,7 @@ const { URLSearchParams } = require('url');
 var config = null
 
 //Variables
-const client = new Discord.Client();
+const client = new Discord.Client({intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES]});
 const prefix = '!';
 
 //Logger add
@@ -106,7 +106,7 @@ client.on('ready', () => {
 /**
  * Listen for messages
  */
-client.on('message', async (message) => {
+client.on('messageCreate', async (message) => {
     //Stop bot or not messages
     if (!message.content.startsWith('!') || message.author.bot) return;
     //Make sure the bot doesn't read itself
@@ -132,19 +132,19 @@ client.on('message', async (message) => {
 
             if (!args[0]) {
                 let reply = await embed(`User error!`, `You didn't enter a username after the command!`, `0xFF0000`)
-                message.channel.send(reply)
+                message.channel.send({ embeds: [reply] });
                 return;
             }
 
             if (user === null) {
                 let reply = await embed("Invalid Username!", "The username is invalid, please make sure you typed it in correctly.", `0xFF0000`);
-                message.channel.send(reply);
+                message.channel.send({ embeds: [reply] });
                 return;
             }
 
             // We make an embed here so people won't think the bot has crashed.
             var waitMessage = await embed(`Please wait...`, ``, randomColor);
-            message.channel.send(waitMessage)
+            message.channel.send({ embeds: [waitMessage] });
 
             // Add the fileds
             var fields = [{
@@ -198,7 +198,7 @@ client.on('message', async (message) => {
             var color = randomColor
             var reply = await embed(user.name, description, color, fields, thumbnail);
             message.channel.bulkDelete(1);
-            message.channel.send(reply);
+            message.channel.send({ embeds: [reply] });
         }
 
         if(command == 'cape') {
@@ -219,15 +219,13 @@ client.on('message', async (message) => {
                                 var embed = new Discord.MessageEmbed()
                                     .setDescription(`A cape has been detected, [here's a direct download to it](${attachment.url})`)
                                     .setColor(randomColor)
-                                message.channel.send({
-                                    embed
-                                });
+                                message.channel.send({ embeds: [embed] });
                             }
                         }
                     });
                 } else {
                     var reply = await embed(`User error!`, `You didn't upload an image with the command!`, `0xFF0000`)
-                    message.channel.send(reply)
+                    message.channel.send({ embeds: [reply] });
                     return;
                 }
             } else {
@@ -259,9 +257,7 @@ client.on('message', async (message) => {
         }
     } catch (err) {
         var reply = embed(`Oops! I just got an error.`, `I guess report it to staff, here's the error I got: \n` + "```" + err + "```", `0xFF9900`)
-        message.channel.send({
-            reply
-        });
+        message.channel.send({ embeds: [reply] });
         logger.error(err.stack);
     }
 });
