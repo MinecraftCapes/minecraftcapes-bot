@@ -1,5 +1,7 @@
 {
-    "client_id": "xxxx",
+    "token": "",
+    "clientId": "",
+    "guildId": "238799720787476481",
     "cape_urls": [
         {
             "name": "MinecraftCapes",
