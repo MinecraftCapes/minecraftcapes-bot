@@ -1,11 +1,6 @@
 //Required Libs
-import { Client, GatewayIntentBits, Collection, Events } from 'discord.js'
-import * as winston from "winston"
-import fetch from 'node-fetch'
-import path from 'node:path'
-import fs from 'node:fs'
+import { Client, GatewayIntentBits, Collection, Events, EmbedBuilder } from 'discord.js'
 import * as config from '../config.json' assert { type: "json" };
-import { fileURLToPath } from 'url';
 
 //Commands
 import capeCommand from './commands/cape.js'
@@ -14,8 +9,14 @@ import premiumCommand from './commands/premium.js'
 import userCommand from './commands/user.js'
 
 //Variables
-const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages]});
-const { combine, timestamp, printf } = winston.format;
+export const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.MessageContent
+    ],
+});
 
 var special_ids = {
     founder: "478667633932238872",
@@ -23,21 +24,6 @@ var special_ids = {
     supportStaff: "478670065483513860",
     capeCreator: "628211166321311744",
 };
-
-//Logger add
-const logger = winston.createLogger({
-    level: 'info',
-    format: combine(
-        timestamp(),
-        printf(({ level, message, timestamp }) => {
-            return `${timestamp} ${level.toUpperCase()}: ${message}`;
-        })
-    ),
-    colorize: true,
-    transports: [
-        new winston.transports.Console()
-    ]
-})
 
 // Load Commands
 client.commands = new Collection();
@@ -50,7 +36,7 @@ client.commands.set(userCommand.data.name, userCommand)
  * Once the client has logged in
  */
 client.on('ready', () => {
-    logger.info(`Logged in as ${client.user.tag}!`);
+    console.log(`[INFO] Logged in as ${client.user.tag}!`);
     client.user.setStatus('online')
 });
 
@@ -61,14 +47,14 @@ client.on(Events.InteractionCreate, async interaction => {
 	const command = interaction.client.commands.get(interaction.commandName);
 
 	if (!command) {
-		logger.error(`No command matching ${interaction.commandName} was found.`);
+		console.log(`[ERROR] No command matching ${interaction.commandName} was found.`);
 		return;
 	}
 
 	try {
 		await command.execute(interaction);
 	} catch (error) {
-		logger.error(error);
+		console.log(`[ERROR] ${error}`);
 		if (interaction.replied || interaction.deferred) {
 			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
 		} else {
@@ -76,6 +62,23 @@ client.on(Events.InteractionCreate, async interaction => {
 		}
 	}
 });
+
+//Look for legacy messages
+client.on('messageCreate', async message => {
+    if (!message.content.startsWith('!') || message.author.bot) return;
+
+    var args = message.content.slice(1).split(' ');
+    var command = args.shift().toLowerCase();
+
+    if(command == "user" || command == "premium" || command == "cape" || command == "ears") {
+        if(command == "premium") {
+            message.delete();
+        }
+
+        let reply = new EmbedBuilder().setTitle('Error!').setDescription(`That command is now a slash command. Please use /${command}`).setColor('#FF0000')
+        message.channel.send({ embeds: [reply] });
+    }
+})
 
 //Login the bot
 client.login(config.default.token);
