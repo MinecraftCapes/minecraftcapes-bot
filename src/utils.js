@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import * as config from '../../config.json' assert { type: "json" };
+import * as config from '../config.json' assert { type: "json" };
 
 /**
  * Get user from the API
