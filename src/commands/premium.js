@@ -34,8 +34,6 @@ export default {
                 await member.roles.add(role);
 
 				discordResponse = new EmbedBuilder().setTitle('Successs').setDescription('You now have the premium role :)').setColor('#00FF00');
-
-				//force a check for sync
 			}
 		}
 

@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import * as config from '../../config.json' assert { type: "json" };
 import { client } from '../index.js';
+import { doBoostUpdate } from '../utils.js';
 
 export default {
 	data: new SlashCommandBuilder()
@@ -34,6 +35,8 @@ export default {
                 await member.roles.add(role);
 
 				discordResponse = new EmbedBuilder().setTitle('Successs').setDescription('You have now linked your account!').setColor('#00FF00');
+
+				doBoostUpdate(member.id, member.premiumSince != null)
 			}
 		}
 

@@ -1,6 +1,7 @@
 //Required Libs
 import { Client, GatewayIntentBits, Collection, Events, EmbedBuilder } from 'discord.js'
 import * as config from '../config.json' assert { type: "json" };
+import { doBoostUpdate } from '../utils.js';
 
 //Commands
 import capeCommand from './commands/cape.js'
@@ -92,11 +93,12 @@ client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
     //A new booster
     if(!oldMember.premiumSince && newMember.premiumSince) {
         console.log(newMember.nickname + " is new a booster!");
+        doBoostUpdate(member.id, true)
     }
 
     //No longer a booster
     if(oldMember.premiumSince && !newMember.premiumSince) {
-        console.log(newMember.nickname + " stopped boosting!");
+        doBoostUpdate(member.id, false)
     }
 })
 
