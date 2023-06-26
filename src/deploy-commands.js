@@ -4,12 +4,14 @@ import * as config from '../config.json' assert { type: "json" };
 //Commands
 import capeCommand from './commands/cape.js'
 import earsCommand from './commands/ears.js'
+import linkCommand from './commands/link.js'
 import premiumCommand from './commands/premium.js'
 import userCommand from './commands/user.js'
 
 const commands = [
 	capeCommand.data.toJSON(),
 	earsCommand.data.toJSON(),
+	linkCommand.data.toJSON(),
 	premiumCommand.data.toJSON(),
 	userCommand.data.toJSON(),
 ];

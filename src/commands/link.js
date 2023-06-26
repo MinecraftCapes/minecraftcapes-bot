@@ -4,9 +4,9 @@ import { client } from '../index.js';
 
 export default {
 	data: new SlashCommandBuilder()
-		.setName('premium')
-		.setDescription('Give you premium')
-		.addStringOption(option => option.setName('code').setDescription('The code from MinecraftCapes.net/premium').setRequired(true)),
+		.setName('link')
+		.setDescription('Link your discord and MinecraftCapes account')
+		.addStringOption(option => option.setName('code').setDescription('The code from MinecraftCapes.net/premium/boost').setRequired(true)),
 	async execute(interaction) {
 		const code = interaction.options.getString('code');
 
@@ -16,7 +16,7 @@ export default {
 		params.append('code', code);
 
 		// Send post request
-		const response = await fetch('https://api.minecraftcapes.net/api/premium/discord/check', {
+		const response = await fetch('https://api.minecraftcapes.net/api/premium/boost/discord/check', {
 			method: 'POST',
 			body: params,
 		});
@@ -29,13 +29,11 @@ export default {
 			if (data.success) {
                 const guild = await client.guilds.resolve(config.default.guildId);
                 const member = await guild.members.fetch(interaction.user.id)
-                const role = await guild.roles.fetch('785110885847793694') // Premium
+                const role = await guild.roles.fetch('1122926477588037722') //Linked
 
                 await member.roles.add(role);
 
-				discordResponse = new EmbedBuilder().setTitle('Successs').setDescription('You now have the premium role :)').setColor('#00FF00');
-
-				//force a check for sync
+				discordResponse = new EmbedBuilder().setTitle('Successs').setDescription('You have now linked your account!').setColor('#00FF00');
 			}
 		}
 

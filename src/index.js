@@ -5,6 +5,7 @@ import * as config from '../config.json' assert { type: "json" };
 //Commands
 import capeCommand from './commands/cape.js'
 import earsCommand from './commands/ears.js'
+import linkCommand from './commands/link.js'
 import premiumCommand from './commands/premium.js'
 import userCommand from './commands/user.js'
 
@@ -18,17 +19,11 @@ export const client = new Client({
     ],
 });
 
-var special_ids = {
-    founder: "478667633932238872",
-    contributor: "479048180202340362",
-    supportStaff: "478670065483513860",
-    capeCreator: "628211166321311744",
-};
-
 // Load Commands
 client.commands = new Collection();
 client.commands.set(capeCommand.data.name, capeCommand)
 client.commands.set(earsCommand.data.name, earsCommand)
+client.commands.set(linkCommand.data.name, linkCommand)
 client.commands.set(premiumCommand.data.name, premiumCommand)
 client.commands.set(userCommand.data.name, userCommand)
 
@@ -77,6 +72,31 @@ client.on('messageCreate', async message => {
 
         let reply = new EmbedBuilder().setTitle('Error!').setDescription(`That command is now a slash command. Please use /${command}`).setColor('#FF0000')
         message.channel.send({ embeds: [reply] });
+    }
+
+    // Keeping this here as a good test for events
+    // if(command == "testnitro" && message.author.id == "231385835054956544") {
+    //     const guild = await client.guilds.resolve(config.default.guildId);
+    //     const original = await guild.members.fetch("231385835054956544")
+
+    //     let clone = structuredClone(original);
+    //     clone.premiumSince = new Date()
+
+    //     client.emit('guildMemberUpdate', original, clone);
+    //     client.emit('guildMemberUpdate', clone, original);
+    // }
+})
+
+//Handle Discord Boosting
+client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
+    //A new booster
+    if(!oldMember.premiumSince && newMember.premiumSince) {
+        console.log(newMember.nickname + " is new a booster!");
+    }
+
+    //No longer a booster
+    if(oldMember.premiumSince && !newMember.premiumSince) {
+        console.log(newMember.nickname + " stopped boosting!");
     }
 })
 

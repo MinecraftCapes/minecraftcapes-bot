@@ -10,8 +10,6 @@ export default {
 	async execute(interaction) {
 		const mcUser = interaction.options.getString('user');
 
-		console.log(`[INFO] Running !user for ${mcUser}`);
-
 		// Random message colour
 		const randomColor = Math.floor(Math.random() * 16777215).toString(16);
 
