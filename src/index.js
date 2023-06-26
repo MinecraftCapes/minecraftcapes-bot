@@ -92,13 +92,12 @@ client.on('messageCreate', async message => {
 client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
     //A new booster
     if(!oldMember.premiumSince && newMember.premiumSince) {
-        console.log(newMember.nickname + " is new a booster!");
-        doBoostUpdate(member.id, true)
+        doBoostUpdate(newMember.id, true)
     }
 
     //No longer a booster
     if(oldMember.premiumSince && !newMember.premiumSince) {
-        doBoostUpdate(member.id, false)
+        doBoostUpdate(newMember.id, false)
     }
 })
 

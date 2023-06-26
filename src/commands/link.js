@@ -37,7 +37,7 @@ export default {
 
 				discordResponse = new EmbedBuilder().setTitle('Successs').setDescription('You have now linked your account!').setColor('#00FF00');
 
-				doBoostUpdate(member.id, member.premiumSince != null)
+				doBoostUpdate(interaction.user.id, member.premiumSince != null)
 			}
 		}
 
