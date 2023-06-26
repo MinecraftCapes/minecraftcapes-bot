@@ -14,6 +14,7 @@ export default {
 		// Post params
 		const params = new URLSearchParams();
 		params.append('key', config.default.api_key);
+		params.append('discord', interaction.user.id);
 		params.append('code', code);
 
 		// Send post request
