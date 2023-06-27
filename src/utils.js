@@ -37,7 +37,7 @@ export async function doBoostUpdate(userId, isBoosting = false) {
 	const params = new URLSearchParams();
 	params.append('key', config.default.api_key);
 	params.append('discord', userId);
-	params.append('boosting', isBoosting);
+	params.append('boosting', +isBoosting);
 
 	// Send post request
 	fetch('https://api.minecraftcapes.net/api/premium/boost/discord/update', {
