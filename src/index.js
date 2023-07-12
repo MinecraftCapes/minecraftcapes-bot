@@ -67,7 +67,7 @@ client.on('messageCreate', async message => {
     var command = args.shift().toLowerCase();
 
     if(command == "user" || command == "premium" || command == "cape" || command == "ears") {
-        if(command == "premium") {
+        if(command == "premium" || command == "link") {
             message.delete();
         }
 

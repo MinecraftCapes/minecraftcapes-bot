@@ -1,6 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import * as config from '../../config.json' assert { type: "json" };
-import { client } from '../index.js';
 import { doBoostUpdate } from '../utils.js';
 
 export default {
@@ -29,9 +28,8 @@ export default {
 			const data = await response.json();
 
 			if (data.success) {
-                const guild = await client.guilds.resolve(config.default.guildId);
-                const member = await guild.members.fetch(interaction.user.id)
-                const role = await guild.roles.fetch('1122926477588037722') //Linked
+                const member = await interaction.guild.members.fetch(interaction.user.id)
+                const role = await interaction.guild.roles.fetch('1122926477588037722') //Linked
 
                 await member.roles.add(role);
 
