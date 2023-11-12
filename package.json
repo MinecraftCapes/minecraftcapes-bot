@@ -20,13 +20,13 @@
   },
   "homepage": "https://github.com/james090500/MinecraftCapesBot#readme",
   "dependencies": {
-    "discord.js": "^14.11.0",
-    "logform": "^2.5.1",
-    "node-fetch": "^3.3.1",
-    "winston": "^3.9.0"
+    "discord.js": "^14.13.0",
+    "logform": "^2.6.0",
+    "node-fetch": "^3.3.2",
+    "winston": "^3.11.0"
   },
   "devDependencies": {
-    "eslint": "^8.43.0",
-    "nodemon": "^2.0.22"
+    "eslint": "^8.53.0",
+    "nodemon": "^3.0.1"
   }
 }

@@ -10,9 +10,6 @@ export default {
 	async execute(interaction) {
 		const mcUser = interaction.options.getString('user');
 
-		// Random message colour
-		const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-
 		// Get the user
 		const user = await getUser(mcUser);
 
@@ -75,7 +72,7 @@ export default {
 
 		const description = `**[NameMC Link](https://mine.ly/${user.uuid})**\n**[MinecraftCapes Link](https://minecraftcapes.net/user/${user.uuid})**`;
 		const thumbnail = `https://minecraftapi.net/api/v2/profile/${user.uuid}/avatar?size=265&overlay=true`;
-		const reply = new EmbedBuilder().setTitle(user.name).setDescription(description).setColor(randomColor).setFields(fields).setThumbnail(thumbnail)
+		const reply = new EmbedBuilder().setTitle(user.name).setDescription(description).setColor('Random').setFields(fields).setThumbnail(thumbnail)
 
 		await interaction.reply({ embeds: [reply] });
 	}

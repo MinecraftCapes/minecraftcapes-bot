@@ -76,28 +76,28 @@ client.on('messageCreate', async message => {
     }
 
     // Keeping this here as a good test for events
-    // if(command == "testnitro" && message.author.id == "231385835054956544") {
-    //     const guild = await client.guilds.resolve(config.default.guildId);
-    //     const original = await guild.members.fetch("231385835054956544")
+    if(command == "testnitro" && message.author.id == "231385835054956544") {
+        // const guild = await client.guilds.resolve(config.default.guildId);
+        // const original = await guild.members.fetch("231385835054956544")
 
-    //     let clone = structuredClone(original);
-    //     clone.premiumSince = new Date()
+        // let clone = structuredClone(original);
+        // clone.premiumSince = new Date()
 
-    //     client.emit('guildMemberUpdate', original, clone);
-    //     client.emit('guildMemberUpdate', clone, original);
-    // }
+        // client.emit('guildMemberUpdate', original, clone);
+        // client.emit('guildMemberUpdate', clone, original);
+    }
 })
 
 //Handle Discord Boosting
 client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
     //A new booster
     if(!oldMember.premiumSince && newMember.premiumSince) {
-        doBoostUpdate(newMember.id, true)
+        doBoostUpdate(newMember.user.id, true)
     }
 
     //No longer a booster
     if(oldMember.premiumSince && !newMember.premiumSince) {
-        doBoostUpdate(newMember.id, false)
+        doBoostUpdate(newMember.user.id, false)
     }
 })
 

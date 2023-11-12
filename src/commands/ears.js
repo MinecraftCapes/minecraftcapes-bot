@@ -13,10 +13,9 @@ export default {
 
 		if (earsFile.url.endsWith('.png') || earsFile.url.endsWith('.gif')) {
 			// Create embed message with the direct link to the image(s)'s URL.
-			const randomColor = Math.floor(Math.random() * 16777215).toString(16);
 			embed = new EmbedBuilder()
 				.setDescription(`A ears has been detected, [here's a direct download to it](${earsFile.url})`)
-				.setColor(randomColor);
+				.setColor('Random');
 		}
 		else {
 			embed = new EmbedBuilder().setDescription('That is not a valid ears file!');
