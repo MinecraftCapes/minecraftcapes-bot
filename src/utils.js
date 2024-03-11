@@ -45,3 +45,16 @@ export async function doBoostUpdate(userId, isBoosting = false) {
 		body: params,
 	});
 }
+
+// Roles
+export const roles = {
+	'SUPPORT_STAFF': '478670065483513860',
+	'HELPER': '479048180202340362',
+	'BOOSTER': '656976584854601772',
+	'LINKED': '1122926477588037722',
+}
+
+export const channels = {
+	'SHOWCASE': '1117404178638196776',
+	'BOT_COMMANDS': '760857696567296030'
+}

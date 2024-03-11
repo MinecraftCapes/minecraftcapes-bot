@@ -66,7 +66,7 @@ client.on('messageCreate', async message => {
     var args = message.content.slice(1).split(' ');
     var command = args.shift().toLowerCase();
 
-    if(command == "user" || command == "premium" || command == "cape" || command == "ears") {
+    if(command == "user" || command == "premium" || command == "cape" || command == "ears" || command == "link") {
         if(command == "premium" || command == "link") {
             message.delete();
         }
