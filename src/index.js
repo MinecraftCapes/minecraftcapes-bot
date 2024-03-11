@@ -1,7 +1,7 @@
 //Required Libs
-import { Client, GatewayIntentBits, Collection, Events, EmbedBuilder } from 'discord.js'
+import { Client, GatewayIntentBits, Collection, Events, EmbedBuilder, RoleSelectMenuBuilder } from 'discord.js'
 import * as config from '../config.json' assert { type: "json" };
-import { doBoostUpdate } from './utils.js';
+import { doBoostUpdate, roles } from './utils.js';
 
 //Commands
 import capeCommand from './commands/cape.js'
@@ -76,28 +76,45 @@ client.on('messageCreate', async message => {
     }
 
     // Keeping this here as a good test for events
-    if(command == "testnitro" && message.author.id == "231385835054956544") {
-        // const guild = await client.guilds.resolve(config.default.guildId);
-        // const original = await guild.members.fetch("231385835054956544")
+    // if(command == "testnitro" && message.author.id == "231385835054956544") {
+    //     const guild = await client.guilds.resolve(config.default.guildId);
+    //     const original = await guild.members.fetch("231385835054956544")
 
-        // let clone = structuredClone(original);
-        // clone.premiumSince = new Date()
+    //     let clone = structuredClone(original);
 
-        // client.emit('guildMemberUpdate', original, clone);
-        // client.emit('guildMemberUpdate', clone, original);
+    //     client.emit('guildMemberUpdate', original, clone);
+    //     // client.emit('guildMemberUpdate', clone, original);
+    // }
+
+    //Diagnoses for getting current nitro IDs
+    if(command == "getnitro" && message.author.id == "231385835054956544") {
+        // Cache the members
+        await message.guild.members.fetch()
+
+        // Get all the roles
+        const nitroRole = message.guild.roles.cache.find(role => role.id === roles.BOOSTER);
+        const nitroMembers = nitroRole.members.map(m => m.id);
+
+        // Output the roles
+        console.log(nitroMembers)
     }
 })
 
 //Handle Discord Boosting
 client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
+
     //A new booster
-    if(!oldMember.premiumSince && newMember.premiumSince) {
+    const oldHasBoost = oldMember.roles.cache.has(roles.BOOSTER);
+    const newHasBoost = newMember.roles.cache.has(roles.BOOSTER);
+    if(!oldHasBoost && newHasBoost) {
         doBoostUpdate(newMember.user.id, true)
+        console.log(`${newMember.id} is now boosting`)
     }
 
     //No longer a booster
-    if(oldMember.premiumSince && !newMember.premiumSince) {
+    if(oldHasBoost && !newHasBoost) {
         doBoostUpdate(newMember.user.id, false)
+        console.log(`${newMember.id} is no longer boosting`)
     }
 })
 
