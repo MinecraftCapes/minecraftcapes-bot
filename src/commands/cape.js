@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
-import { roles, channels } from '../utils.js'
+import { roles, channels } from '../utils.js';
 import { setTimeout } from 'timers/promises';
 
 export default {

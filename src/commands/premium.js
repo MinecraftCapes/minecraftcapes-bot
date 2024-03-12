@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import * as config from '../../config.json' assert { type: "json" };
 import { setTimeout } from 'timers/promises'
+import { roles, channels } from '../utils.js';
 
 export default {
 	data: new SlashCommandBuilder()
