@@ -12,7 +12,7 @@ export default {
 		if (interaction.channel.id != channels.SHOWCASE && !(await interaction.guild.members.fetch(interaction.user.id)).roles.cache.some(role => role.id === roles.SUPPORT_STAFF || role.id === roles.HELPER)) {
 			const discordResponse = new EmbedBuilder().setTitle('Error').setDescription(`Use <#${channels.SHOWCASE}> for showcases`).setColor('#FF0000');
 			await interaction.reply({ embeds: [discordResponse] });
-			await setTimeout(5_000);
+			await setTimeout(5000);
 			await interaction.deleteReply();
 		}
 		else {

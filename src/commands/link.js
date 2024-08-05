@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
-import * as config from '../../config.json' assert { type: "json" };
+import config from '../config.js';
 import { doBoostUpdate, roles, channels } from '../utils.js';
 import { setTimeout } from 'timers/promises';
 
@@ -17,7 +17,7 @@ export default {
 
 			// Post params
 			const params = new URLSearchParams();
-			params.append('key', config.default.api_key);
+			params.append('key', config.api_key);
 			params.append('discord', interaction.user.id);
 			params.append('code', code);
 
@@ -47,7 +47,7 @@ export default {
 
 		await interaction.reply({ embeds: [discordResponse] });
 
-		await setTimeout(5_000);
+		await setTimeout(5000);
 
 		await interaction.deleteReply();
 	},

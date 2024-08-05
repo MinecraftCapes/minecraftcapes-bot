@@ -5,7 +5,6 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "deploy": "node src/deploy-commands.js",
     "prod": "node src/index.js",
     "dev": "nodemon src/index.js"
   },

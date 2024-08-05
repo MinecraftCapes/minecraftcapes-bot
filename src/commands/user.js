@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { getUser, checkUrl, roles, channels } from '../utils.js';
-import * as config from '../../config.json' assert { type: "json" };
-import { setTimeout } from 'timers/promises'
+import config from '../config.js';
+import { setTimeout } from 'timers/promises';
 
 export default {
 	data: new SlashCommandBuilder()
@@ -10,9 +10,9 @@ export default {
 		.addStringOption(option => option.setName('user').setDescription('The minecraft user you want to check').setRequired(true)),
 	async execute(interaction) {
 		if(interaction.channel.id != channels.BOT_COMMANDS && !(await interaction.guild.members.fetch(interaction.user.id)).roles.cache.some(role => role.id === roles.SUPPORT_STAFF || role.id === roles.HELPER)) {
-			discordResponse = new EmbedBuilder().setTitle('Error').setDescription(`Use <#${channels.BOT_COMMANDS}> for commands`).setColor('#FF0000');
+			const discordResponse = new EmbedBuilder().setTitle('Error').setDescription(`Use <#${channels.BOT_COMMANDS}> for commands`).setColor('#FF0000');
 			await interaction.reply({ embeds: [discordResponse] });
-			await setTimeout(5_000);
+			await setTimeout(5000);
 			await interaction.deleteReply();
 		} else {
 			const mcUser = interaction.options.getString('user');

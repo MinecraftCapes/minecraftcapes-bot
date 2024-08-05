@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import * as config from '../config.json' assert { type: "json" };
+import config from './config.js';
 
 /**
  * Get user from the API
@@ -35,7 +35,7 @@ export async function checkUrl(url) {
 export async function doBoostUpdate(userId, isBoosting = false) {
 	// Post params
 	const params = new URLSearchParams();
-	params.append('key', config.default.api_key);
+	params.append('key', config.api_key);
 	params.append('discord', userId);
 	params.append('boosting', +isBoosting);
 

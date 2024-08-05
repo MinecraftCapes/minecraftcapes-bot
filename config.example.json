@@ -5,15 +5,7 @@
     "guildId": "238799720787476481",
     "cape_urls": [
         {
-            "name": "MinecraftCapes",
-            "url": "https://minecraftcapes.net/profile/{$id}/cape"
-        },
-        {
-            "name": "MinecraftCapes Ears",
-            "url": "https://minecraftcapes.net/profile/{$id}/ears"
-        },
-        {
-            "name": "Optifine",
+            "name": "OptiFine",
             "url": "http://s.optifine.net/capes/{$username}.png"
         }
     ]
