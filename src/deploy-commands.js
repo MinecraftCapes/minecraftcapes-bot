@@ -31,7 +31,8 @@ async function execute() {
 		);
 
 		console.log(`[INFO] Successfully reloaded ${data.length} application (/) commands.`);
-	} catch (error) {
+	}
+	catch (error) {
 		// And of course, make sure you catch and log any errors!
 		console.error(error);
 	}

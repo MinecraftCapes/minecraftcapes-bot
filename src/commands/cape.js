@@ -20,7 +20,7 @@ export default {
 			const capeFile = interaction.options.getAttachment('file');
 			const userToPing = interaction.options.getUser('user');
 
-			if (capeFile.url.endsWith('.png') || capeFile.url.endsWith('.gif')) {
+			if (capeFile.contentType == 'image/png' || capeFile.contentType == 'image/gif') {
 				// Create embed message with the direct link to the image(s)'s URL.
 				embed = new EmbedBuilder()
 					.setDescription(`A cape has been detected, [here's a direct download to it](${capeFile.url})`)

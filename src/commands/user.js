@@ -9,12 +9,13 @@ export default {
 		.setDescription('Get information about a Minecraft user!')
 		.addStringOption(option => option.setName('user').setDescription('The minecraft user you want to check').setRequired(true)),
 	async execute(interaction) {
-		if(interaction.channel.id != channels.BOT_COMMANDS && !(await interaction.guild.members.fetch(interaction.user.id)).roles.cache.some(role => role.id === roles.SUPPORT_STAFF || role.id === roles.HELPER)) {
+		if (interaction.channel.id != channels.BOT_COMMANDS && !(await interaction.guild.members.fetch(interaction.user.id)).roles.cache.some(role => role.id === roles.SUPPORT_STAFF || role.id === roles.HELPER)) {
 			const discordResponse = new EmbedBuilder().setTitle('Error').setDescription(`Use <#${channels.BOT_COMMANDS}> for commands`).setColor('#FF0000');
 			await interaction.reply({ embeds: [discordResponse] });
 			await setTimeout(5000);
 			await interaction.deleteReply();
-		} else {
+		}
+		else {
 			const mcUser = interaction.options.getString('user');
 
 			// Get the user
@@ -25,7 +26,7 @@ export default {
 
 			// Make sure user is real
 			if (user === null) {
-				const embed = new EmbedBuilder().setTitle('Invalid Username!').setDescription('The username is invalid, please make sure you typed it in correctly.').setColor('#FF0000')
+				const embed = new EmbedBuilder().setTitle('Invalid Username!').setDescription('The username is invalid, please make sure you typed it in correctly.').setColor('#FF0000');
 				await interaction.reply({ embeds: [embed] });
 				return;
 			}
@@ -79,9 +80,9 @@ export default {
 
 			const description = `**[NameMC Link](https://mine.ly/${user.uuid})**\n**[MinecraftCapes Link](https://minecraftcapes.net/user/${user.uuid})**`;
 			const thumbnail = `https://minecraftapi.net/api/v2/profile/${user.uuid}/avatar?size=265&overlay=true`;
-			const reply = new EmbedBuilder().setTitle(user.name).setDescription(description).setColor('Random').setFields(fields).setThumbnail(thumbnail)
+			const reply = new EmbedBuilder().setTitle(user.name).setDescription(description).setColor('Random').setFields(fields).setThumbnail(thumbnail);
 
 			await interaction.reply({ embeds: [reply] });
 		}
-	}
+	},
 };

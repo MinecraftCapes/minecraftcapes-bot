@@ -20,7 +20,7 @@ export default {
 			const earsFile = interaction.options.getAttachment('file');
 			const userToPing = interaction.options.getUser('user');
 
-			if (earsFile.url.endsWith('.png') || earsFile.url.endsWith('.gif')) {
+			if (earsFile.contentType == 'image/png') {
 				// Create embed message with the direct link to the image(s)'s URL.
 				embed = new EmbedBuilder()
 					.setDescription(`A ears has been detected, [here's a direct download to it](${earsFile.url})`)

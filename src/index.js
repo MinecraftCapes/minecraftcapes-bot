@@ -92,7 +92,7 @@ client.on('messageCreate', async message => {
 	//     // client.emit('guildMemberUpdate', clone, original);
 	// }
 
-	// Diagnoses for getting current nitro IDs
+	// Diagnoses for getting current nitro IDs (james090500 ID)
 	if (command == 'getnitro' && message.author.id == '231385835054956544') {
 		// Cache the members
 		await message.guild.members.fetch();
@@ -102,7 +102,8 @@ client.on('messageCreate', async message => {
 		const nitroMembers = nitroRole.members.map(m => m.id);
 
 		// Output the roles
-		console.log(nitroMembers);
+		message.channel.send({ content: 'Nitro users have been logged to the console' });
+		console.log(`The following IDs are boosting\n${nitroMembers.join('\n')}`);
 	}
 });
 
@@ -121,6 +122,11 @@ client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
 	if (oldHasBoost && !newHasBoost) {
 		doBoostUpdate(newMember.user.id, false);
 		console.log(`${newMember.id} is no longer boosting`);
+
+		async () => {
+			const channel = await client.channels.fetch('478663896887066644');
+			channel.send({ content: '<@newMember.id> has stopped boosting, please check API' });
+		};
 	}
 });
 

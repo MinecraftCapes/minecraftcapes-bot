@@ -10,9 +10,10 @@ export default {
 		.addStringOption(option => option.setName('code').setDescription('The code from MinecraftCapes.net/premium/boost').setRequired(true)),
 	async execute(interaction) {
 		let discordResponse;
-		if(interaction.channel.id != channels.BOT_COMMANDS && !(await interaction.guild.members.fetch(interaction.user.id)).roles.cache.some(role => role.id === roles.SUPPORT_STAFF || role.id === roles.HELPER)) {
+		if (interaction.channel.id != channels.BOT_COMMANDS && !(await interaction.guild.members.fetch(interaction.user.id)).roles.cache.some(role => role.id === roles.SUPPORT_STAFF || role.id === roles.HELPER)) {
 			discordResponse = new EmbedBuilder().setTitle('Error').setDescription(`Use <#${channels.BOT_COMMANDS}> for commands`).setColor('#FF0000');
-		} else {
+		}
+		else {
 			const code = interaction.options.getString('code');
 
 			// Post params
@@ -33,14 +34,14 @@ export default {
 				const data = await response.json();
 
 				if (data.success) {
-					const member = await interaction.guild.members.fetch(interaction.user.id)
-					const role = await interaction.guild.roles.fetch(roles.LINKED) //Linked
+					const member = await interaction.guild.members.fetch(interaction.user.id);
+					const role = await interaction.guild.roles.fetch(roles.LINKED);
 
 					await member.roles.add(role);
 
 					discordResponse = new EmbedBuilder().setTitle('Successs').setDescription('You have now linked your account!').setColor('#00FF00');
 
-					doBoostUpdate(interaction.user.id, member.premiumSince != null)
+					doBoostUpdate(interaction.user.id, member.premiumSince != null);
 				}
 			}
 		}
