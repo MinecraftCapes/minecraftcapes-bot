@@ -117,19 +117,15 @@ client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 		await doBoostUpdate(newMember.user.id, true);
 		logger.info(`${newMember.id} is now boosting`);
 	}
-	else if (oldHasBoost && !newHasBoost) {
+
+	if (oldHasBoost && !newHasBoost) {
 		// No longer a booster
 		await doBoostUpdate(newMember.user.id, false);
 		logger.info(`${newMember.id} is no longer boosting`);
-
-		try {
-			const channel = await client.channels.fetch('478663896887066644');
-			await channel.send({ content: `<@${newMember.id}> has stopped boosting, please check API` });
-		}
-		catch (error) {
-			console.error(`Failed to send message: ${error}`);
-		}
 	}
+
+	const channel = await client.channels.fetch('478663896887066644');
+	await channel.send({ content: `<@${newMember.id}> has changed a role my magic bot calculations say BOOSTING = ${newHasBoost}` });
 });
 
 
