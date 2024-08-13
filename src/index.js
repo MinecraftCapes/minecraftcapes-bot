@@ -1,7 +1,7 @@
 // Required Libs
 import { Client, GatewayIntentBits, Collection, Events, EmbedBuilder } from 'discord.js';
 import config from './config.js';
-import { doBoostUpdate, roles } from './utils.js';
+import { doBoostUpdate, roles, logger } from './utils.js';
 
 // Commands
 import deployCommands from './deploy-commands.js';
@@ -33,7 +33,7 @@ client.commands.set(userCommand.data.name, userCommand);
  * Once the client has logged in
  */
 client.on('ready', () => {
-	console.log(`[INFO] Logged in as ${client.user.tag}!`);
+	logger.info(`Logged in as ${client.user.tag}!`);
 	client.user.setStatus('online');
 
 	deployCommands.execute();
@@ -47,7 +47,7 @@ client.on(Events.InteractionCreate, async interaction => {
 	const command = interaction.client.commands.get(interaction.commandName);
 
 	if (!command) {
-		console.log(`[ERROR] No command matching ${interaction.commandName} was found.`);
+		logger.error(`No command matching ${interaction.commandName} was found.`);
 		return;
 	}
 
@@ -55,7 +55,7 @@ client.on(Events.InteractionCreate, async interaction => {
 		await command.execute(interaction);
 	}
 	catch (error) {
-		console.log(`[ERROR] ${error}`);
+		logger.error(`${error}`);
 		if (interaction.replied || interaction.deferred) {
 			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
 		}
@@ -108,27 +108,30 @@ client.on('messageCreate', async message => {
 });
 
 // Handle Discord Boosting
-client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
-
-	// A new booster
+client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 	const oldHasBoost = oldMember.roles.cache.has(roles.BOOSTER);
 	const newHasBoost = newMember.roles.cache.has(roles.BOOSTER);
+
 	if (!oldHasBoost && newHasBoost) {
-		doBoostUpdate(newMember.user.id, true);
-		console.log(`${newMember.id} is now boosting`);
+		// A new booster
+		await doBoostUpdate(newMember.user.id, true);
+		logger.info(`${newMember.id} is now boosting`);
 	}
+	else if (oldHasBoost && !newHasBoost) {
+		// No longer a booster
+		await doBoostUpdate(newMember.user.id, false);
+		logger.info(`${newMember.id} is no longer boosting`);
 
-	// No longer a booster
-	if (oldHasBoost && !newHasBoost) {
-		doBoostUpdate(newMember.user.id, false);
-		console.log(`${newMember.id} is no longer boosting`);
-
-		async () => {
+		try {
 			const channel = await client.channels.fetch('478663896887066644');
-			channel.send({ content: '<@newMember.id> has stopped boosting, please check API' });
-		};
+			await channel.send({ content: `<@${newMember.id}> has stopped boosting, please check API` });
+		}
+		catch (error) {
+			console.error(`Failed to send message: ${error}`);
+		}
 	}
 });
+
 
 // Login the bot
 client.login(config.token);

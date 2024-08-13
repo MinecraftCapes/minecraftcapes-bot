@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import winston from 'winston';
 import config from './config.js';
 
 /**
@@ -45,6 +46,25 @@ export async function doBoostUpdate(userId, isBoosting = false) {
 		body: params,
 	});
 }
+
+const { combine, timestamp, printf } = winston.format;
+export const logger = winston.createLogger({
+	level: 'info',
+	format: combine(
+		timestamp(),
+		printf(({ level, message, timestamp: ts }) => {
+			return `${ts} ${level.toUpperCase()}: ${message}`;
+		}),
+	),
+	colorize: true,
+	transports: [
+		new winston.transports.Console(),
+		new winston.transports.File({
+			filename: 'error.log',
+			level: 'error',
+		}),
+	],
+});
 
 // Roles
 export const roles = {
