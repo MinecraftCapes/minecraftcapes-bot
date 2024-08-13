@@ -109,8 +109,10 @@ client.on('messageCreate', async message => {
 
 // Handle Discord Boosting
 client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
-	const oldHasBoost = oldMember.roles.cache.has(roles.BOOSTER);
-	const newHasBoost = newMember.roles.cache.has(roles.BOOSTER);
+	// const oldHasBoost = oldMember.roles.cache.has(roles.BOOSTER);
+	// const newHasBoost = newMember.roles.cache.has(roles.BOOSTER);
+	const oldHasBoost = oldMember.premiumSince;
+	const newHasBoost = newMember.premiumSince;
 
 	if (!oldHasBoost && newHasBoost) {
 		// A new booster
@@ -124,8 +126,10 @@ client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 		logger.info(`${newMember.id} is no longer boosting`);
 	}
 
-	const channel = await client.channels.fetch('478663896887066644');
-	await channel.send({ content: `<@${newMember.id}> has changed a role my magic bot calculations say BOOSTING = ${newHasBoost}` });
+	if (oldHasBoost != newHasBoost) {
+		const channel = await client.channels.fetch('478663896887066644');
+		await channel.send({ content: `<@${newMember.id}> has changed a role my magic bot calculations say BOOSTING = ${newHasBoost}` });
+	}
 });
 
 
