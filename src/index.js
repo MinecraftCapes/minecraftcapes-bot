@@ -1,5 +1,5 @@
 // Required Libs
-import { Client, GatewayIntentBits, Collection, Events, EmbedBuilder } from 'discord.js';
+import { Client, Partials, GatewayIntentBits, Collection, Events, EmbedBuilder } from 'discord.js';
 import config from './config.js';
 import { doBoostUpdate, roles, logger } from './utils.js';
 
@@ -18,6 +18,9 @@ export const client = new Client({
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.GuildMembers,
 		GatewayIntentBits.MessageContent,
+	],
+	partials: [
+		Partials.GuildMember,
 	],
 });
 
@@ -122,6 +125,11 @@ client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 		// No longer a booster
 		await doBoostUpdate(newMember.user.id, false);
 		logger.info(`${newMember.id} is no longer boosting`);
+	}
+
+	if (oldHasBoost != newHasBoost) {
+		const channel = await client.channels.fetch('478663896887066644');
+		await channel.send({ content: `<@${newMember.id}> has changed their boosting value. My estimations are BOOSTING = ${newHasBoost ? 'TRUE' : 'FALSE'}` });
 	}
 });
 
