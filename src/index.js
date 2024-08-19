@@ -18,10 +18,7 @@ export const client = new Client({
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.GuildMembers,
 		GatewayIntentBits.MessageContent,
-	],
-	partials: [
-		Partials.GuildMember,
-	],
+	]
 });
 
 // Load Commands
@@ -112,24 +109,25 @@ client.on('messageCreate', async message => {
 
 // Handle Discord Boosting
 client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
-	const oldHasBoost = oldMember.premiumSince;
-	const newHasBoost = newMember.premiumSince;
+	const announce = async (member, isBoosting) => {
+		const channel = await client.channels.fetch('478663896887066644');
+		await channel.send({ content: `<@${member}> has changed their boosting value. My estimations are BOOSTING = ${isBoosting}` });
+	}
 
-	if (!oldHasBoost && newHasBoost) {
+	// Check if the role was added
+	if (!oldMember.roles.cache.has(roles.BOOSTER) && newMember.roles.cache.has(roles.BOOSTER)) {
 		// A new booster
 		await doBoostUpdate(newMember.user.id, true);
 		logger.info(`${newMember.id} is now boosting`);
+		await announce(newMember.id, true)
 	}
 
-	if (oldHasBoost && !newHasBoost) {
+	// Check if the role was removed
+	if (oldMember.roles.cache.has(roles.BOOSTER) && !newMember.roles.cache.has(roles.BOOSTER)) {
 		// No longer a booster
 		await doBoostUpdate(newMember.user.id, false);
 		logger.info(`${newMember.id} is no longer boosting`);
-	}
-
-	if (oldHasBoost != newHasBoost) {
-		const channel = await client.channels.fetch('478663896887066644');
-		await channel.send({ content: `<@${newMember.id}> has changed their boosting value. My estimations are BOOSTING = ${newHasBoost ? 'TRUE' : 'FALSE'}` });
+		await announce(newMember.id, false)
 	}
 });
 
