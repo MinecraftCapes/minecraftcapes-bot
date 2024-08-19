@@ -18,7 +18,7 @@ export const client = new Client({
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.GuildMembers,
 		GatewayIntentBits.MessageContent,
-	]
+	],
 });
 
 // Load Commands
@@ -112,22 +112,22 @@ client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 	const announce = async (member, isBoosting) => {
 		const channel = await client.channels.fetch('478663896887066644');
 		await channel.send({ content: `<@${member}> has changed their boosting value. My estimations are BOOSTING = ${isBoosting}` });
-	}
+	};
 
 	// Check if the role was added
 	if (!oldMember.roles.cache.has(roles.BOOSTER) && newMember.roles.cache.has(roles.BOOSTER)) {
 		// A new booster
-		await doBoostUpdate(newMember.user.id, true);
+		doBoostUpdate(newMember.user.id, true);
 		logger.info(`${newMember.id} is now boosting`);
-		await announce(newMember.id, true)
+		await announce(newMember.id, true);
 	}
 
 	// Check if the role was removed
 	if (oldMember.roles.cache.has(roles.BOOSTER) && !newMember.roles.cache.has(roles.BOOSTER)) {
 		// No longer a booster
-		await doBoostUpdate(newMember.user.id, false);
+		doBoostUpdate(newMember.user.id, false);
 		logger.info(`${newMember.id} is no longer boosting`);
-		await announce(newMember.id, false)
+		await announce(newMember.id, false);
 	}
 });
 
