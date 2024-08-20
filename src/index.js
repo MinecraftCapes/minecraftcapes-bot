@@ -19,6 +19,9 @@ export const client = new Client({
 		GatewayIntentBits.GuildMembers,
 		GatewayIntentBits.MessageContent,
 	],
+	partials: [
+		Partials.GuildMember,
+	],
 });
 
 // Load Commands
@@ -108,18 +111,12 @@ client.on('messageCreate', async message => {
 });
 
 // Handle Discord Boosting
-client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
-	const announce = async (member, isBoosting) => {
-		const channel = await client.channels.fetch('478663896887066644');
-		await channel.send({ content: `<@${member}> has changed their boosting value. My estimations are BOOSTING = ${isBoosting}` });
-	};
-
+client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
 	// Check if the role was added
 	if (!oldMember.roles.cache.has(roles.BOOSTER) && newMember.roles.cache.has(roles.BOOSTER)) {
 		// A new booster
 		doBoostUpdate(newMember.user.id, true);
 		logger.info(`${newMember.id} is now boosting`);
-		await announce(newMember.id, true);
 	}
 
 	// Check if the role was removed
@@ -127,7 +124,6 @@ client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
 		// No longer a booster
 		doBoostUpdate(newMember.user.id, false);
 		logger.info(`${newMember.id} is no longer boosting`);
-		await announce(newMember.id, false);
 	}
 });
 
