@@ -1,5 +1,6 @@
 import config from './config.js';
 import { roles } from './utils.js';
+import axios from 'axios';
 
 async function getNitro(guild) {
 	// Cache the members
@@ -7,21 +8,16 @@ async function getNitro(guild) {
 
 	// Get all the roles
 	const nitroRole = guild.roles.cache.find(role => role.id === roles.BOOSTER);
-	return nitroRole.members.map(m => m.id);
+	return nitroRole.members.map(m => m.id.toString());
 }
 
 async function updateApi(guild) {
 	const nitroMembers = await getNitro(guild);
 
-	// Post params
-	const params = new URLSearchParams();
-	params.append('key', config.api_key);
-	params.append('discord', nitroMembers);
-
 	// Send post request
-	fetch('https://api.minecraftcapes.net/api/premium/boost/discord/verify', {
-		method: 'POST',
-		body: params,
+	axios.post('https://api.minecraftcapes.net/api/premium/boost/discord/verify', {
+		key: config.api_key,
+		discord: nitroMembers,
 	});
 }
 
@@ -33,9 +29,10 @@ async function doBoostUpdate(userId, isBoosting = false) {
 	params.append('boosting', +isBoosting);
 
 	// Send post request
-	fetch('https://api.minecraftcapes.net/api/premium/boost/discord/update', {
-		method: 'POST',
-		body: params,
+	await axios.post('https://api.minecraftcapes.net/api/premium/boost/discord/update', {
+		key: config.api_key,
+		discord: userId,
+		boosting: isBoosting,
 	});
 }
 

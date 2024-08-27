@@ -2,6 +2,7 @@ import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { getUser, checkUrl, roles, channels } from '../utils.js';
 import config from '../config.js';
 import { setTimeout } from 'timers/promises';
+import axios from 'axios';
 
 export default {
 	data: new SlashCommandBuilder()
@@ -38,8 +39,8 @@ export default {
 			}];
 
 			// Check MinecraftCapes
-			let minecraftcapes = await fetch(`https://api.minecraftcapes.net/profile/${user.uuid}`);
-			minecraftcapes = await minecraftcapes.json();
+			let minecraftcapes = await axios.get(`https://api.minecraftcapes.net/profile/${user.uuid}`);
+			minecraftcapes = minecraftcapes.data;
 			if (minecraftcapes.animatedCape || minecraftcapes.capeGlint || minecraftcapes.upsideDown) {
 				fields.push({
 					name: 'Premium',

@@ -3,6 +3,7 @@ import config from '../config.js';
 import { roles, channels } from '../utils.js';
 import nitroUtils from '../nitro-utils.js';
 import { setTimeout } from 'timers/promises';
+import axios from 'axios';
 
 export default {
 	data: new SlashCommandBuilder()
@@ -17,22 +18,16 @@ export default {
 		else {
 			const code = interaction.options.getString('code');
 
-			// Post params
-			const params = new URLSearchParams();
-			params.append('key', config.api_key);
-			params.append('discord', interaction.user.id);
-			params.append('code', code);
-
-			// Send post request
-			const response = await fetch('https://api.minecraftcapes.net/api/premium/boost/discord/check', {
-				method: 'POST',
-				body: params,
+			const response = await axios.post('https://api.minecraftcapes.net/api/premium/boost/discord/check', {
+				key: config.api_key,
+				discord: interaction.user.id,
+				code: code,
 			});
 
 			discordResponse = new EmbedBuilder().setTitle('Error').setDescription('That code doesn\'t seem correct!').setColor('#FF0000');
 
-			if (response.ok && response.headers.get('content-type') == 'application/json') {
-				const data = await response.json();
+			if (response.headers['content-type'] == 'application/json') {
+				const data = await response.data;
 
 				if (data.success) {
 					const member = await interaction.guild.members.fetch(interaction.user.id);

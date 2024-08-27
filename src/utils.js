@@ -1,18 +1,18 @@
 import fetch from 'node-fetch';
 import winston from 'winston';
+import axios from 'axios';
 
 /**
  * Get user from the API
  * @param {*} value
  */
 export async function getUser(value) {
-	let response = await fetch(`https://minecraftapi.net/api/v2/profile/${value}`);
+	let response = await axios.get(`https://minecraftapi.net/api/v2/profile/${value}`);
 	if (response.status == 404) {
 		return null;
 	}
 
-	response = await response.json();
-	return response;
+	return response.data;
 }
 
 /**
@@ -20,12 +20,12 @@ export async function getUser(value) {
  * @param {*} url
  */
 export async function checkUrl(url) {
-	let response = await fetch(url);
+	let response = await axios.get(url);
 
 	if (response.status === 404) {
 		return false;
 	}
-	response = await response.text();
+	response = await response.data;
 	if (typeof response === 'undefined' || response == '') {
 		return false;
 	}
