@@ -1,7 +1,8 @@
 // Required Libs
 import { Client, Partials, GatewayIntentBits, Collection, Events, EmbedBuilder } from 'discord.js';
 import config from './config.js';
-import { doBoostUpdate, roles, logger } from './utils.js';
+import { roles, logger } from './utils.js';
+import nitroUtils from './nitro-utils.js';
 
 // Commands
 import deployCommands from './deploy-commands.js';
@@ -12,7 +13,7 @@ import premiumCommand from './commands/premium.js';
 import userCommand from './commands/user.js';
 
 // Variables
-export const client = new Client({
+const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildMessages,
@@ -39,8 +40,14 @@ client.on('ready', () => {
 	logger.info(`Logged in as ${client.user.tag}!`);
 	client.user.setStatus('online');
 
+	// Deployt the slash commands
 	deployCommands.execute();
 	setInterval(() => deployCommands.execute(), 3600000);
+
+	// Send a list of all boosters
+	const currentGuild = client.guilds.cache.get('238799720787476481');
+	nitroUtils.updateApi(currentGuild);
+	setInterval(() => nitroUtils.updateApi(currentGuild), 864000000);
 });
 
 // Respond to a command
@@ -83,31 +90,6 @@ client.on('messageCreate', async message => {
 		const reply = new EmbedBuilder().setTitle('Error!').setDescription(`That command is now a slash command. Please use /${command}`).setColor('#FF0000');
 		message.channel.send({ embeds: [reply] });
 	}
-
-	// Keeping this here as a good test for events
-	// if(command == "testnitro" && message.author.id == "231385835054956544") {
-	//     const guild = await client.guilds.resolve(config.guildId);
-	//     const original = await guild.members.fetch("231385835054956544")
-
-	//     let clone = structuredClone(original);
-
-	//     client.emit('guildMemberUpdate', original, clone);
-	//     // client.emit('guildMemberUpdate', clone, original);
-	// }
-
-	// Diagnoses for getting current nitro IDs (james090500 ID)
-	if (command == 'getnitro' && message.author.id == '231385835054956544') {
-		// Cache the members
-		await message.guild.members.fetch();
-
-		// Get all the roles
-		const nitroRole = message.guild.roles.cache.find(role => role.id === roles.BOOSTER);
-		const nitroMembers = nitroRole.members.map(m => m.id);
-
-		// Output the roles
-		message.channel.send({ content: 'Nitro users have been logged to the console' });
-		console.log(`The following IDs are boosting\n${nitroMembers.join('\n')}`);
-	}
 });
 
 // Handle Discord Boosting
@@ -115,18 +97,17 @@ client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
 	// Check if the role was added
 	if (!oldMember.roles.cache.has(roles.BOOSTER) && newMember.roles.cache.has(roles.BOOSTER)) {
 		// A new booster
-		doBoostUpdate(newMember.user.id, true);
+		nitroUtils.doBoostUpdate(newMember.user.id, true);
 		logger.info(`${newMember.id} is now boosting`);
 	}
 
 	// Check if the role was removed
 	if (oldMember.roles.cache.has(roles.BOOSTER) && !newMember.roles.cache.has(roles.BOOSTER)) {
 		// No longer a booster
-		doBoostUpdate(newMember.user.id, false);
+		nitroUtils.doBoostUpdate(newMember.user.id, false);
 		logger.info(`${newMember.id} is no longer boosting`);
 	}
 });
-
 
 // Login the bot
 client.login(config.token);

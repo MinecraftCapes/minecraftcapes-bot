@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import config from '../config.js';
-import { doBoostUpdate, roles, channels } from '../utils.js';
+import { roles, channels } from '../utils.js';
+import nitroUtils from '../nitro-utils.js';
 import { setTimeout } from 'timers/promises';
 
 export default {
@@ -41,7 +42,7 @@ export default {
 
 					discordResponse = new EmbedBuilder().setTitle('Successs').setDescription('You have now linked your account!').setColor('#00FF00');
 
-					doBoostUpdate(interaction.user.id, member.premiumSince != null);
+					nitroUtils.doBoostUpdate(interaction.user.id, member.premiumSince != null);
 				}
 			}
 		}
