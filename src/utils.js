@@ -7,7 +7,11 @@ import axios from 'axios';
  * @param {*} value
  */
 export async function getUser(value) {
-	let response = await axios.get(`https://minecraftapi.net/api/v2/profile/${value}`);
+	const response = await axios.get(`https://api.minecraftapi.net/api/v2/profile/${value}`, {
+		headers: {
+			'User-Agent': 'minecraftcapes-bot/2023',
+		},
+	});
 	if (response.status == 404) {
 		return null;
 	}
@@ -20,7 +24,12 @@ export async function getUser(value) {
  * @param {*} url
  */
 export async function checkUrl(url) {
-	let response = await axios.get(url);
+	let response = await axios.get(url, {
+		headers: {
+			'User-Agent': 'minecraftcapes-bot/2023',
+		},
+	}).catch(error => error);
+
 
 	if (response.status === 404) {
 		return false;

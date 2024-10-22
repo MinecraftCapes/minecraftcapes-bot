@@ -21,6 +21,10 @@ export default {
 			const response = await axios.post('https://api.minecraftcapes.net/api/premium/discord/check', {
 				key: config.api_key,
 				code: code,
+			}, {
+				headers: {
+					'User-Agent': 'minecraftcapes-bot/2023',
+				},
 			});
 
 			discordResponse = new EmbedBuilder().setTitle('Error').setDescription('That code doesn\'t seem correct!').setColor('#FF0000');

@@ -18,6 +18,10 @@ async function updateApi(guild) {
 	axios.post('https://api.minecraftcapes.net/api/premium/boost/discord/verify', {
 		key: config.api_key,
 		discord: nitroMembers,
+	}, {
+		headers: {
+			'User-Agent': 'minecraftcapes-bot/2023',
+		},
 	});
 }
 
@@ -33,6 +37,10 @@ async function doBoostUpdate(userId, isBoosting = false) {
 		key: config.api_key,
 		discord: userId,
 		boosting: isBoosting,
+	}, {
+		headers: {
+			'User-Agent': 'minecraftcapes-bot/2023',
+		},
 	});
 }
 

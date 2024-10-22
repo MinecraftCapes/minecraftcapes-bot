@@ -22,6 +22,10 @@ export default {
 				key: config.api_key,
 				discord: interaction.user.id,
 				code: code,
+			}, {
+				headers: {
+					'User-Agent': 'minecraftcapes-bot/2023',
+				},
 			});
 
 			discordResponse = new EmbedBuilder().setTitle('Error').setDescription('That code doesn\'t seem correct!').setColor('#FF0000');
