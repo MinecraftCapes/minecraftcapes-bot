@@ -11,7 +11,7 @@ export default {
 	async execute(interaction) {
 		if (interaction.channel.id != channels.SHOWCASE && !(await interaction.guild.members.fetch(interaction.user.id)).roles.cache.some(role => role.id === roles.SUPPORT_STAFF || role.id === roles.HELPER)) {
 			const discordResponse = new EmbedBuilder().setTitle('Error').setDescription(`Use <#${channels.SHOWCASE}> for showcases`).setColor('#FF0000');
-			await interaction.reply({ embeds: [discordResponse] });
+			await interaction.editReply({ embeds: [discordResponse] });
 			await setTimeout(5000);
 			await interaction.deleteReply();
 		}
@@ -30,7 +30,7 @@ export default {
 				embed = new EmbedBuilder().setDescription('That is not a valid cape file!');
 			}
 
-			await interaction.reply({
+			await interaction.editReply({
 				content: userToPing != null ? `Hey <@${userToPing.id}>!` : null,
 				embeds: [ embed ],
 			});

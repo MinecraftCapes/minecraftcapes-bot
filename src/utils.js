@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import winston from 'winston';
 import axios from 'axios';
 
@@ -7,16 +6,40 @@ import axios from 'axios';
  * @param {*} value
  */
 export async function getUser(value) {
-	const response = await axios.get(`https://api.minecraftapi.net/api/v2/profile/${value}`, {
-		headers: {
-			'User-Agent': 'minecraftcapes-bot/2023',
-		},
-	});
-	if (response.status == 404) {
-		return null;
-	}
+	var response, username, uuid
 
-	return response.data;
+		response = await axios({
+			url: `https://api.minecraftapi.net/api/v2/profile/${value}`,
+			headers: { 'User-Agent': 'minecraftcapes-bot/2023' },
+			validateStatus: false,
+		});
+
+		if(response.data.success) {
+			logger.info(`${value} found from Siriuo API`)
+			uuid = response.data.uuid
+			username = response.data.name
+		}
+
+		if(!response.data.success) {
+			response = await axios({
+				url: `https://playerdb.co/api/player/minecraft/${value}`,
+				headers: { 'User-Agent': 'minecraftcapes-bot/2023' },
+				validateStatus: false,
+			});
+
+
+			if(response.data.success) {
+				logger.info(`${value} found from PlayerDB API`)
+				uuid = response.data.data.player.raw_id
+				username = response.data.data.player.username
+			}
+		}
+
+		if(uuid != null && username != null) {
+			return { uuid: uuid, username: username };
+		} else {
+			return null;
+		}
 }
 
 /**

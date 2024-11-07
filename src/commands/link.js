@@ -46,7 +46,7 @@ export default {
 			}
 		}
 
-		await interaction.reply({ embeds: [discordResponse] });
+		await interaction.editReply({ embeds: [discordResponse] });
 
 		await setTimeout(5000);
 

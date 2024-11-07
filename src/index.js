@@ -55,6 +55,7 @@ client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = interaction.client.commands.get(interaction.commandName);
+	await interaction.deferReply();
 
 	if (!command) {
 		logger.error(`No command matching ${interaction.commandName} was found.`);
@@ -70,7 +71,7 @@ client.on(Events.InteractionCreate, async interaction => {
 			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
 		}
 		else {
-			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+			await interaction.editReply({ content: 'There was an error while executing this command!', ephemeral: true });
 		}
 	}
 });

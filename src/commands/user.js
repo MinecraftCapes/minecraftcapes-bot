@@ -12,7 +12,7 @@ export default {
 	async execute(interaction) {
 		if (interaction.channel.id != channels.BOT_COMMANDS && !(await interaction.guild.members.fetch(interaction.user.id)).roles.cache.some(role => role.id === roles.SUPPORT_STAFF || role.id === roles.HELPER)) {
 			const discordResponse = new EmbedBuilder().setTitle('Error').setDescription(`Use <#${channels.BOT_COMMANDS}> for commands`).setColor('#FF0000');
-			await interaction.reply({ embeds: [discordResponse] });
+			await interaction.editReply({ embeds: [discordResponse] });
 			await setTimeout(5000);
 			await interaction.deleteReply();
 		}
@@ -28,7 +28,7 @@ export default {
 			// Make sure user is real
 			if (user === null) {
 				const embed = new EmbedBuilder().setTitle('Invalid Username!').setDescription('The username is invalid, please make sure you typed it in correctly.').setColor('#FF0000');
-				await interaction.reply({ embeds: [embed] });
+				await interaction.editReply({ embeds: [embed] });
 				return;
 			}
 
@@ -72,7 +72,7 @@ export default {
 				const cape = cape_urls[cape_url];
 				let url = cape.url;
 				url = url.replace('{$uuid}', user.uuid);
-				url = url.replace('{$username}', user.name);
+				url = url.replace('{$username}', user.username);
 				const url_check = await checkUrl(url);
 
 				if (url_check) {
@@ -85,9 +85,9 @@ export default {
 
 			const description = `**[NameMC Link](https://mine.ly/${user.uuid})**\n**[MinecraftCapes Link](https://minecraftcapes.net/user/${user.uuid})**`;
 			const thumbnail = `https://api.minecraftapi.net/api/v2/profile/${user.uuid}/avatar?size=265&overlay=true`;
-			const reply = new EmbedBuilder().setTitle(user.name).setDescription(description).setColor('Random').setFields(fields).setThumbnail(thumbnail);
+			const reply = new EmbedBuilder().setTitle(user.username).setDescription(description).setColor('Random').setFields(fields).setThumbnail(thumbnail);
 
-			await interaction.reply({ embeds: [reply] });
+			await interaction.editReply({ embeds: [reply] });
 		}
 	},
 };
