@@ -1,39 +1,38 @@
-import { REST, Routes } from 'discord.js';
-import config from './config.js';
+import { REST, Routes } from 'discord.js'
+import config from './config.js'
 
 // Commands
-import capeCommand from './commands/cape.js';
-import earsCommand from './commands/ears.js';
-import linkCommand from './commands/link.js';
-import premiumCommand from './commands/premium.js';
-import userCommand from './commands/user.js';
+import capeCommand from './commands/cape.js'
+import earsCommand from './commands/ears.js'
+import linkCommand from './commands/link.js'
+import premiumCommand from './commands/premium.js'
+import userCommand from './commands/user.js'
 
 const commands = [
-	capeCommand.data.toJSON(),
-	earsCommand.data.toJSON(),
-	linkCommand.data.toJSON(),
-	premiumCommand.data.toJSON(),
-	userCommand.data.toJSON(),
-];
+    capeCommand.data.toJSON(),
+    earsCommand.data.toJSON(),
+    linkCommand.data.toJSON(),
+    premiumCommand.data.toJSON(),
+    userCommand.data.toJSON(),
+]
 
 // Construct and prepare an instance of the REST module
-const rest = new REST().setToken(config.token);
+const rest = new REST().setToken(config.token)
 
 // and deploy your commands!
 async function execute() {
-	try {
-		// The put method is used to fully refresh all commands in the guild with the current set
-		await rest.put(
-			Routes.applicationGuildCommands(config.clientId, config.guildId),
-			{ body: commands },
-		);
-	}
-	catch (error) {
-		// And of course, make sure you catch and log any errors!
-		console.error(error);
-	}
+    try {
+        // The put method is used to fully refresh all commands in the guild with the current set
+        await rest.put(
+            Routes.applicationGuildCommands(config.clientId, config.guildId),
+            { body: commands }
+        )
+    } catch (error) {
+        // And of course, make sure you catch and log any errors!
+        console.error(error)
+    }
 }
 
 export default {
-	execute,
-};
+    execute,
+}

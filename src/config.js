@@ -7,6 +7,6 @@
  *
  * This way, we just ignore this file in eslint and voila.
  */
-import config from '../config.json' with { type: "json" };
+import config from '../config.json' with { type: 'json' }
 
-export default config;
+export default config

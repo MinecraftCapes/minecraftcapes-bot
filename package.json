@@ -1,32 +1,37 @@
 {
-  "name": "minecraftcapesbot",
-  "version": "1.1.0",
-  "description": "Bot for MinecraftCapes",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "prod": "node src/index.js",
-    "dev": "nodemon src/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/james090500/MinecraftCapesBot.git"
-  },
-  "author": "Siriuo",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/james090500/MinecraftCapesBot/issues"
-  },
-  "homepage": "https://github.com/james090500/MinecraftCapesBot#readme",
-  "dependencies": {
-    "axios": "^1.7.5",
-    "discord.js": "^14.15.3",
-    "logform": "^2.6.1",
-    "node-fetch": "^3.3.2",
-    "winston": "^3.14.1"
-  },
-  "devDependencies": {
-    "eslint": "^9.9.0",
-    "nodemon": "^3.1.4"
-  }
+    "name": "minecraftcapesbot",
+    "version": "1.1.0",
+    "description": "Bot for MinecraftCapes",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "prod": "node src/index.js",
+        "dev": "nodemon src/index.js",
+        "format": "npm run lint && npm run prettier",
+        "lint": "eslint --fix",
+        "prettier": "prettier . --write"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/james090500/MinecraftCapesBot.git"
+    },
+    "author": "Siriuo",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/james090500/MinecraftCapesBot/issues"
+    },
+    "homepage": "https://github.com/james090500/MinecraftCapesBot#readme",
+    "dependencies": {
+        "axios": "^1.7.9",
+        "discord.js": "^14.17.3",
+        "logform": "^2.7.0",
+        "node-fetch": "^3.3.2",
+        "winston": "^3.17.0"
+    },
+    "devDependencies": {
+        "eslint": "^9.19.0",
+        "eslint-config-prettier": "^10.0.1",
+        "nodemon": "^3.1.9",
+        "prettier": "^3.4.2"
+    }
 }
