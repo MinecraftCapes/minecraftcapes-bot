@@ -1,5 +1,5 @@
 import config from './config.js'
-import { roles } from './utils.js'
+import { logger, roles } from './utils.js'
 import axios from 'axios'
 
 async function getNitro(guild) {
@@ -14,21 +14,29 @@ async function getNitro(guild) {
 }
 
 async function updateApi(guild) {
+    logger.info("Sending bulk Nitro update to MinecraftCapes")
     const nitroMembers = await getNitro(guild)
 
     // Send post request
-    axios.post(
-        'https://api.minecraftcapes.net/api/premium/boost/discord/verify',
-        {
-            key: config.api_key,
-            discord: nitroMembers,
-        },
-        {
-            headers: {
-                'User-Agent': 'minecraftcapes-bot/2023',
+    try {
+        axios.post(
+            'https://api.minecraftcapes.net/api/premium/boost/discord/verify',
+            {
+                key: config.api_key,
+                discord: nitroMembers,
             },
-        }
-    )
+            {
+                headers: {
+                    'User-Agent': 'minecraftcapes-bot/2023',
+                },
+            }
+        )
+    } catch (error) {
+        logger.error(
+            `Failed to send all Nitro members to MinecraftCapes: ${error.message}`
+        )
+    }
+    logger.info("Bulk Nitro update complete!")
 }
 
 async function doBoostUpdate(userId, isBoosting = false) {
@@ -39,19 +47,25 @@ async function doBoostUpdate(userId, isBoosting = false) {
     params.append('boosting', +isBoosting)
 
     // Send post request
-    await axios.post(
-        'https://api.minecraftcapes.net/api/premium/boost/discord/update',
-        {
-            key: config.api_key,
-            discord: userId,
-            boosting: isBoosting,
-        },
-        {
-            headers: {
-                'User-Agent': 'minecraftcapes-bot/2023',
+    try {
+        await axios.post(
+            'https://api.minecraftcapes.net/api/premium/boost/discord/update',
+            {
+                key: config.api_key,
+                discord: userId,
+                boosting: isBoosting,
             },
-        }
-    )
+            {
+                headers: {
+                    'User-Agent': 'minecraftcapes-bot/2023',
+                },
+            }
+        )
+    } catch (error) {
+        logger.error(
+            `Failed to update Nitro for a member for MinecraftCapes: ${error.message}`
+        )
+    }
 }
 
 export default {

@@ -82,19 +82,21 @@ export default {
                 })
             }
 
-			if (minecraftcapes.animated_cape_url || minecraftcapes.cape_url) {
-				fields.push({
-					name: 'MinecraftCapes Cape',
-					value: minecraftcapes.animated_cape_url ?? minecraftcapes.cape_url,
-				});
-			}
+            if (minecraftcapes.animated_cape_url || minecraftcapes.cape_url) {
+                fields.push({
+                    name: 'MinecraftCapes Cape',
+                    value:
+                        minecraftcapes.animated_cape_url ??
+                        minecraftcapes.cape_url,
+                })
+            }
 
-			if (minecraftcapes.ear_url) {
-				fields.push({
-					name: 'MinecraftCapes Ears',
-					value: minecraftcapes.ear_url,
-				});
-			}
+            if (minecraftcapes.ear_url) {
+                fields.push({
+                    name: 'MinecraftCapes Ears',
+                    value: minecraftcapes.ear_url,
+                })
+            }
 
             // Check for other cape providers
             for (const cape_url in cape_urls) {
