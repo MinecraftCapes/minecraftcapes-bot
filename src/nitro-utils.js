@@ -63,7 +63,7 @@ async function doBoostUpdate(userId, isBoosting = false) {
         )
     } catch (error) {
         logger.error(
-            `Failed to update Nitro for a member for MinecraftCapes: ${error.message}`
+            `Failed to update Nitro for a member ${userId}: ${error.message}`
         )
     }
 }
