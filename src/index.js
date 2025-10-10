@@ -41,7 +41,7 @@ client.commands.set(userCommand.data.name, userCommand)
 /**
  * Once the client has logged in
  */
-client.on('ready', () => {
+client.on('clientReady', () => {
     logger.info(`Logged in as ${client.user.tag}!`)
     client.user.setStatus('online')
 
