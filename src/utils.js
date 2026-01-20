@@ -6,39 +6,64 @@ import axios from 'axios'
  * @param {*} value
  */
 export async function getUser(value) {
-    var response, username, uuid
-
-    response = await axios({
-        url: `https://api.minecraftapi.net/api/v2/profile/${value}`,
-        headers: { 'User-Agent': 'minecraftcapes-bot/2023' },
-        validateStatus: false,
-    })
-
-    if (response.data.success) {
-        logger.info(`${value} found from Siriuo API`)
-        uuid = response.data.uuid
-        username = response.data.name
-    }
-
-    if (!response.data.success) {
-        response = await axios({
+    const headers = { 'User-Agent': 'minecraftcapes-bot/2023' }
+    const apis = [
+        {
+            url: `https://api.minecraftapi.net/v3/profile/${value}?params=[uuid,name]`,
+            process: (data) => {
+                return {
+                    uuid: data.uuid,
+                    username: data.name,
+                }
+            },
+        },
+        {
             url: `https://playerdb.co/api/player/minecraft/${value}`,
-            headers: { 'User-Agent': 'minecraftcapes-bot/2023' },
-            validateStatus: false,
-        })
+            process: (data) => {
+                return {
+                    uuid: data.data.player.raw_id,
+                    username: data.data.player.username,
+                }
+            },
+        },
+    ]
 
-        if (response.data.success) {
-            logger.info(`${value} found from PlayerDB API`)
-            uuid = response.data.data.player.raw_id
-            username = response.data.data.player.username
+    for (const api of apis) {
+        logger.debug(`[PlayerCache] API Call to ${api.url}`)
+
+        try {
+            // Get API data
+            const response = await axios({
+                url: api.url,
+                headers,
+                validateStatus: () => true,
+                timeout: 2000,
+            })
+
+            // Successful response
+            if (Math.floor(response.status / 100) == 2 && response.data) {
+                const result = api.process(response.data)
+                return result
+            }
+
+            // Invalid user or not found
+            if (response.status == 404) {
+                continue
+            }
+
+            // Try again, other API due to rate limit
+            logger.warn(
+                `[PlayerCache] Failed request to ${api.url}: ${response.status} ${response.statusText}`
+            )
+        } catch (err) {
+            logger.warn(
+                `[PlayerCache] Failed request to ${api.url}: ${err.message}`
+            )
         }
     }
 
-    if (uuid != null && username != null) {
-        return { uuid: uuid, username: username }
-    } else {
-        return null
-    }
+    // None succeeded
+    return null
 }
 
 /**
@@ -95,4 +120,8 @@ export const roles = {
 export const channels = {
     SHOWCASE: '1117404178638196776',
     BOT_COMMANDS: '760857696567296030',
+}
+
+export const categories = {
+    SUPPORT: '727179631740059749',
 }

@@ -8,7 +8,7 @@ import {
     EmbedBuilder,
 } from 'discord.js'
 import config from './config.js'
-import { roles, logger } from './utils.js'
+import { roles, logger, categories, getUser } from './utils.js'
 import nitroUtils from './nitro-utils.js'
 
 // Commands
@@ -18,6 +18,7 @@ import earsCommand from './commands/ears.js'
 import linkCommand from './commands/link.js'
 import premiumCommand from './commands/premium.js'
 import userCommand from './commands/user.js'
+import UserEmbed from './embeds/UserEmbed.js'
 
 // Variables
 const client = new Client({
@@ -115,6 +116,43 @@ client.on('messageCreate', async (message) => {
     }
 })
 
+// Handle new support ticks
+client.on(Events.ChannelCreate, async (channel) => {
+    if (!channel.isTextBased()) return
+    if (channel.parentId !== categories.SUPPORT) return
+
+    try {
+        const collected = await channel.awaitMessages({
+            max: 1, // wait for 1 message
+            time: 60_000, // 1 minute timeout
+            errors: ['time'],
+        })
+
+        // The Message
+        const message = collected.first()
+
+        // Array of Embed objects
+        const embeds = message.embeds
+
+        // Brittle but functional
+        const username = embeds[1].data.description
+            .split("What's your Minecraft username?** ```")[1]
+            .split('```')[0]
+            .trim()
+
+        // Get the user
+        const user = await getUser(username)
+
+        if (user != null) {
+            const reply = await UserEmbed.get(user)
+
+            channel.send({ embeds: [reply] })
+        }
+    } catch {
+        console.log('No message received in time.')
+    }
+})
+
 // Handle Discord Boosting
 client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
     // Check if the role was added
@@ -124,7 +162,9 @@ client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
     ) {
         // A new booster
         nitroUtils.doBoostUpdate(newMember.user.id, true)
-        logger.info(`${newMember.id} is now boosting`)
+        logger.info(
+            `${newMember.displayName} [${newMember.id}] is now boosting`
+        )
     }
 
     // Check if the role was removed
@@ -134,7 +174,9 @@ client.on(Events.GuildMemberUpdate, (oldMember, newMember) => {
     ) {
         // No longer a booster
         nitroUtils.doBoostUpdate(newMember.user.id, false)
-        logger.info(`${newMember.id} is no longer boosting`)
+        logger.info(
+            `${newMember.displayName} [${newMember.id}] is no longer boosting`
+        )
     }
 })
 

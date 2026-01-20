@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js'
-import { roles, channels } from '../utils.js'
+import { roles, channels, logger } from '../utils.js'
 import { setTimeout } from 'timers/promises'
 
 export default {
@@ -18,6 +18,7 @@ export default {
                 .setDescription('The user to ping for the ears')
         ),
     async execute(interaction) {
+        logger.info(`${interaction.user.displayName} has ran command /ears`)
         if (
             interaction.channel.id != channels.SHOWCASE &&
             !(

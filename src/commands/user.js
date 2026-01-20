@@ -1,8 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js'
-import { getUser, checkUrl, roles, channels } from '../utils.js'
-import config from '../config.js'
+import { getUser, roles, channels, logger } from '../utils.js'
 import { setTimeout } from 'timers/promises'
-import axios from 'axios'
+import UserEmbed from '../embeds/UserEmbed.js'
 
 export default {
     data: new SlashCommandBuilder()
@@ -15,6 +14,7 @@ export default {
                 .setRequired(true)
         ),
     async execute(interaction) {
+        logger.info(`${interaction.user.displayName} has ran command /user`)
         if (
             interaction.channel.id != channels.BOT_COMMANDS &&
             !(
@@ -37,9 +37,6 @@ export default {
             // Get the user
             const user = await getUser(mcUser)
 
-            // Get all cape urls
-            const cape_urls = config.cape_urls
-
             // Make sure user is real
             if (user === null) {
                 const embed = new EmbedBuilder()
@@ -52,76 +49,7 @@ export default {
                 return
             }
 
-            // Add the fileds
-            const fields = [
-                {
-                    name: 'UUID:',
-                    value: `\`${user.uuid}\``,
-                },
-            ]
-
-            // Check MinecraftCapes
-            let minecraftcapes = await axios.get(
-                `https://api.minecraftcapes.net/profile/${user.uuid}`,
-                {
-                    headers: {
-                        'User-Agent': 'minecraftcapes-bot/2023',
-                    },
-                }
-            )
-            minecraftcapes = minecraftcapes.data
-            if (
-                minecraftcapes.animatedCape ||
-                minecraftcapes.capeGlint ||
-                minecraftcapes.upsideDown
-            ) {
-                fields.push({
-                    name: 'Premium',
-                    value: 'Yes :tada:',
-                    inline: true,
-                })
-            }
-
-            if (minecraftcapes.animated_cape_url || minecraftcapes.cape_url) {
-                fields.push({
-                    name: 'MinecraftCapes Cape',
-                    value:
-                        minecraftcapes.animated_cape_url ??
-                        minecraftcapes.cape_url,
-                })
-            }
-
-            if (minecraftcapes.ear_url) {
-                fields.push({
-                    name: 'MinecraftCapes Ears',
-                    value: minecraftcapes.ear_url,
-                })
-            }
-
-            // Check for other cape providers
-            for (const cape_url in cape_urls) {
-                const cape = cape_urls[cape_url]
-                let url = cape.url
-                url = url.replace('{$uuid}', user.uuid)
-                url = url.replace('{$username}', user.username)
-                const url_check = await checkUrl(url)
-
-                if (url_check) {
-                    fields.push({
-                        name: cape.name,
-                        value: url,
-                    })
-                }
-            }
-
-            const description = `**[NameMC Link](https://mine.ly/${user.uuid})**\n**[MinecraftCapes Link](https://minecraftcapes.net/user/${user.uuid})**`
-            const thumbnail = `https://api.minecraftapi.net/api/v2/profile/${user.uuid}/avatar?size=265&overlay=true`
-            const reply = new EmbedBuilder()
-                .setTitle(user.username)
-                .setDescription(description)
-                .setColor('Random')
-                .setFields(fields)
-                .setThumbnail(thumbnail)
+            const reply = await UserEmbed.get(user)
 
             await interaction.editReply({ embeds: [reply] })
         }

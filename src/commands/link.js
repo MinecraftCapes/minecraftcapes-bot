@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js'
 import config from '../config.js'
-import { roles, channels } from '../utils.js'
+import { roles, channels, logger } from '../utils.js'
 import nitroUtils from '../nitro-utils.js'
 import { setTimeout } from 'timers/promises'
 import axios from 'axios'
@@ -18,6 +18,7 @@ export default {
                 .setRequired(true)
         ),
     async execute(interaction) {
+        logger.info(`${interaction.user.displayName} has ran command /link`)
         let discordResponse
         if (
             interaction.channel.id != channels.BOT_COMMANDS &&

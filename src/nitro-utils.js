@@ -14,7 +14,7 @@ async function getNitro(guild) {
 }
 
 async function updateApi(guild) {
-    logger.info("Sending bulk Nitro update to MinecraftCapes")
+    logger.info('Sending bulk Nitro update to MinecraftCapes')
     const nitroMembers = await getNitro(guild)
 
     // Send post request
@@ -36,7 +36,7 @@ async function updateApi(guild) {
             `Failed to send all Nitro members to MinecraftCapes: ${error.message}`
         )
     }
-    logger.info("Bulk Nitro update complete!")
+    logger.info('Bulk Nitro update complete!')
 }
 
 async function doBoostUpdate(userId, isBoosting = false) {
