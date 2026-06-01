@@ -5,6 +5,7 @@ import { roles, channels, logger } from '../utils.js'
 import axios from 'axios'
 
 export default {
+    ephemeral: true,
     data: new SlashCommandBuilder()
         .setName('premium')
         .setDescription('Give you premium')
@@ -34,42 +35,48 @@ export default {
             const code = interaction.options.getString('code')
 
             // Send post request
-            const response = await axios.post(
-                'https://api.minecraftcapes.net/api/premium/discord/check',
-                {
-                    key: config.api_key,
-                    code: code,
-                },
-                {
-                    headers: {
-                        'User-Agent': 'minecraftcapes-bot/2023',
+            try {
+                const response = await axios.post(
+                    'https://api.minecraftcapes.net/api/premium/discord/check',
+                    {
+                        key: config.api_key,
+                        code: code,
                     },
-                }
-            )
+                    {
+                        headers: {
+                            'User-Agent': 'minecraftcapes-bot/2023',
+                        },
+                    }
+                )
 
-            discordResponse = new EmbedBuilder()
-                .setTitle('Error')
-                .setDescription("That code doesn't seem correct!")
-                .setColor('#FF0000')
-
-            if (response.headers['content-type'].includes('application/json')) {
-                const data = await response.data
-
-                if (data.success) {
-                    const member = await interaction.guild.members.fetch(
-                        interaction.user.id
+                if (
+                    response.headers['content-type'].includes(
+                        'application/json'
                     )
-                    const role = await interaction.guild.roles.fetch(
-                        roles.PREMIUM
-                    )
+                ) {
+                    const data = await response.data
 
-                    await member.roles.add(role)
+                    if (data.success) {
+                        const member = await interaction.guild.members.fetch(
+                            interaction.user.id
+                        )
+                        const role = await interaction.guild.roles.fetch(
+                            roles.PREMIUM
+                        )
 
-                    discordResponse = new EmbedBuilder()
-                        .setTitle('Successs')
-                        .setDescription('You now have the premium role :)')
-                        .setColor('#00FF00')
+                        await member.roles.add(role)
+
+                        discordResponse = new EmbedBuilder()
+                            .setTitle('Successs')
+                            .setDescription('You now have the premium role :)')
+                            .setColor('#00FF00')
+                    }
                 }
+            } catch {
+                discordResponse = new EmbedBuilder()
+                    .setTitle('Error')
+                    .setDescription("That code doesn't seem correct!")
+                    .setColor('#FF0000')
             }
         }
 

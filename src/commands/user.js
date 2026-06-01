@@ -4,6 +4,7 @@ import { setTimeout } from 'timers/promises'
 import UserEmbed from '../embeds/UserEmbed.js'
 
 export default {
+    ephemeral: false,
     data: new SlashCommandBuilder()
         .setName('user')
         .setDescription('Get information about a Minecraft user!')

@@ -6,6 +6,7 @@ import {
     Collection,
     Events,
     EmbedBuilder,
+    MessageFlags,
 } from 'discord.js'
 import config from './config.js'
 import { roles, logger, categories, getUser } from './utils.js'
@@ -60,31 +61,22 @@ client.on('clientReady', () => {
 client.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isChatInputCommand()) return
 
-    const command = interaction.client.commands.get(interaction.commandName)
-    await interaction.deferReply()
-
-    if (!command) {
-        logger.error(
-            `No command matching ${interaction.commandName} was found.`
-        )
-        return
-    }
-
     try {
+        const command = interaction.client.commands.get(interaction.commandName)
+        await interaction.deferReply({
+            flags: command.ephemeral ? MessageFlags.Ephemeral : undefined,
+        })
+
+        if (!command) {
+            logger.error(
+                `No command matching ${interaction.commandName} was found.`
+            )
+            return
+        }
+
         await command.execute(interaction)
     } catch (error) {
         logger.error(`${error}`)
-        if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({
-                content: 'There was an error while executing this command!',
-                ephemeral: true,
-            })
-        } else {
-            await interaction.editReply({
-                content: 'There was an error while executing this command!',
-                ephemeral: true,
-            })
-        }
     }
 })
 

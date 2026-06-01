@@ -3,6 +3,7 @@ import { roles, channels, logger } from '../utils.js'
 import { setTimeout } from 'timers/promises'
 
 export default {
+    ephemeral: false,
     data: new SlashCommandBuilder()
         .setName('cape')
         .setDescription('Replies with a direct download link for a cape!')

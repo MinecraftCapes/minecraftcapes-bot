@@ -6,6 +6,7 @@ import { setTimeout } from 'timers/promises'
 import axios from 'axios'
 
 export default {
+    ephemeral: true,
     data: new SlashCommandBuilder()
         .setName('link')
         .setDescription('Link your discord and MinecraftCapes account')
@@ -36,48 +37,54 @@ export default {
         } else {
             const code = interaction.options.getString('code')
 
-            const response = await axios.post(
-                'https://api.minecraftcapes.net/api/premium/boost/discord/check',
-                {
-                    key: config.api_key,
-                    discord: interaction.user.id,
-                    code: code,
-                },
-                {
-                    headers: {
-                        'User-Agent': 'minecraftcapes-bot/2023',
+            try {
+                const response = await axios.post(
+                    'https://api.minecraftcapes.net/api/premium/boost/discord/check',
+                    {
+                        key: config.api_key,
+                        discord: interaction.user.id,
+                        code: code,
                     },
+                    {
+                        headers: {
+                            'User-Agent': 'minecraftcapes-bot/2023',
+                        },
+                    }
+                )
+
+                if (
+                    response.headers['content-type'].includes(
+                        'application/json'
+                    )
+                ) {
+                    const data = await response.data
+
+                    if (data.success) {
+                        const member = await interaction.guild.members.fetch(
+                            interaction.user.id
+                        )
+                        const role = await interaction.guild.roles.fetch(
+                            roles.LINKED
+                        )
+
+                        await member.roles.add(role)
+
+                        discordResponse = new EmbedBuilder()
+                            .setTitle('Successs')
+                            .setDescription('You have now linked your account!')
+                            .setColor('#00FF00')
+
+                        nitroUtils.doBoostUpdate(
+                            interaction.user.id,
+                            member.premiumSince != null
+                        )
+                    }
                 }
-            )
-
-            discordResponse = new EmbedBuilder()
-                .setTitle('Error')
-                .setDescription("That code doesn't seem correct!")
-                .setColor('#FF0000')
-
-            if (response.headers['content-type'].includes('application/json')) {
-                const data = await response.data
-
-                if (data.success) {
-                    const member = await interaction.guild.members.fetch(
-                        interaction.user.id
-                    )
-                    const role = await interaction.guild.roles.fetch(
-                        roles.LINKED
-                    )
-
-                    await member.roles.add(role)
-
-                    discordResponse = new EmbedBuilder()
-                        .setTitle('Successs')
-                        .setDescription('You have now linked your account!')
-                        .setColor('#00FF00')
-
-                    nitroUtils.doBoostUpdate(
-                        interaction.user.id,
-                        member.premiumSince != null
-                    )
-                }
+            } catch {
+                discordResponse = new EmbedBuilder()
+                    .setTitle('Error')
+                    .setDescription("That code doesn't seem correct!")
+                    .setColor('#FF0000')
             }
         }
 
