@@ -119,7 +119,7 @@ export const roles = {
 
 export const channels = {
     SHOWCASE: '1117404178638196776',
-    BOT_COMMANDS: '760857696567296030',
+    BOT_COMMANDS: '1511132069793759412',
 }
 
 export const categories = {
