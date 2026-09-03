@@ -15,10 +15,6 @@ Before using the bot, make sure to make a `config.json` inside of the MinecraftC
 - `!user` Gets the users information
 - `!premium` Gives the user a premium role via an api endpoint
 
-##
-
-![cool image](https://cdn.discordapp.com/attachments/433816025343983618/717421281149976716/Screen_Shot_2020-06-02_at_9.55.59_AM.png)
-
 ## Credits
 
 - **[james090500](https://github.com/james090500)** - _Initial work_

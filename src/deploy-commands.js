@@ -7,6 +7,7 @@ import earsCommand from './commands/ears.js'
 import linkCommand from './commands/link.js'
 import premiumCommand from './commands/premium.js'
 import userCommand from './commands/user.js'
+import { logger } from './utils.js'
 
 const commands = [
     capeCommand.data.toJSON(),
@@ -21,12 +22,15 @@ const rest = new REST().setToken(config.token)
 
 // and deploy your commands!
 async function execute() {
+    logger.info('Deploying Commands...')
     try {
         // The put method is used to fully refresh all commands in the guild with the current set
         await rest.put(
             Routes.applicationGuildCommands(config.clientId, config.guildId),
             { body: commands }
         )
+
+        logger.info('Deployed Commands!')
     } catch (error) {
         // And of course, make sure you catch and log any errors!
         console.error(error)
