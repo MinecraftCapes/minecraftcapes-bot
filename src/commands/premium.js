@@ -39,11 +39,11 @@ export default {
                 const response = await axios.post(
                     'https://api.minecraftcapes.net/api/premium/discord/check',
                     {
-                        key: config.api_key,
                         code: code,
                     },
                     {
                         headers: {
+                            Authorization: `Bearer ${config.api_key}`,
                             'User-Agent': 'minecraftcapes-bot/2023',
                         },
                     }
